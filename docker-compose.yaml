@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  django:
+    build: .
+    command: python trend_link/manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DJANGO_SETTINGS_MODULE=trend_link.settings.development
+      - POSTGRES_DB=mydbname
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_HOST=postgres
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=mydbname
+      - POSTGRES_USER=myuser  
+      - POSTGRES_PASSWORD=mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
