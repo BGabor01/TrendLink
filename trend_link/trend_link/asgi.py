@@ -11,6 +11,8 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trend_link.settings')
+environment = os.getenv("ENVIRONMENT", "development")
+settings_module = f"trend_link.settings.{environment}"
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
 
 application = get_asgi_application()
