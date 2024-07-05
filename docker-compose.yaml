@@ -9,7 +9,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DJANGO_SETTINGS_MODULE=trend_link.settings.development
+      - ENVIRONMENT=development
       - POSTGRES_DB=mydbname
       - POSTGRES_USER=myuser
       - POSTGRES_PASSWORD=mypassword
