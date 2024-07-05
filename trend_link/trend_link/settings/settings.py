@@ -77,7 +77,7 @@ WSGI_APPLICATION = "trend_link.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "trend_link",
+        "NAME": os.environ.get("POSTGRES_DB"),
         "HOST": os.environ.get("POSTGRES_HOST"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "USER": os.environ.get("POSTGRES_USER"),
