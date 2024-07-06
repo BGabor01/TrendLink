@@ -17,13 +17,41 @@
             <p><strong>Email:</strong> {{ profile.user.email }}</p>
             <p><strong>Bio:</strong> {{ profile.bio }}</p>
             <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
+            {% if user == profile.user %}
+                <button type="button" onclick="showEditForm()">Edit</button>
+            {% endif %}
         </div>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="profile_picture" required>
-            <button type="submit">Upload Profile Picture</button>
-        </form>
+        {% if user == profile.user %}
+            <form id="uploadForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ profile.user.id }}">
+                <input type="file" id="fileInput" name="profile_picture" style="display: none;" required>
+                <button type="button" onclick="document.getElementById('fileInput').click();">Upload Profile Picture</button>
+            </form>
+            <form id="updateForm", method="post">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ profile.user.id }}">
+                <div>
+                    <label for="id_bio">Bio:</label>
+                    {{ form.bio }}
+                </div>
+                <div>
+                    <label for="id_birth_date">Birth Date:</label>
+                    {{ form.birth_date }}
+                </div>
+                <button type="submit">Update</button>
+            </form>
+        {% endif %}
     </div>
 
+    <script>
+        function showEditForm() {
+            document.getElementById('updateForm').style.display = 'block';
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function() {
+            document.getElementById('uploadForm').submit();
+        });
+    </script>
 </body>
 </html>
