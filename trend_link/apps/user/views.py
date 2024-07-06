@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.generic import ListView
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -72,14 +73,14 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"profile": profile, "form": form})
 
 
-class ListMembersView(LoginRequiredMixin, View):
+class ListMembersView(LoginRequiredMixin, ListView):
     template_name = "user/members.html"
+    paginate_by = 10
 
-    def get(self, request):
+    def get_queryset(self):
         from apps.user.models import UserProfile
 
-        members = UserProfile.objects.all().exclude(user=request.user)
-        return render(request, self.template_name, {"members": members})
+        return UserProfile.objects.all().exclude(user=self.request.user)
 
 
 class HomeView(View):
