@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'user/profile.css' %}">
+</head>
+<body>
+    <div class="profile-container">
+        <h1>{{ profile.user.username }}'s Profile</h1>
+        <div class="profile-picture">
+            <img src="{{ profile.profile_picture.url }}">
+        </div>
+        <div class="profile-details">
+            <p><strong>Username:</strong> {{ profile.user.username }}</p>
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
+        </div>
+    </div>
+</body>
+</html>
