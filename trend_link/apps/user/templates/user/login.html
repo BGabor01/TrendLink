@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'user/login.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="left">
+            <h1>Welcome to Trendlink</h1>
+            <p>Stay up to date with the trends</p>
+        </div>
+        <div class="right">
+            <div class="login-form-container">
+                <h2>Login</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="{% url 'singup' %}">Create one here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
