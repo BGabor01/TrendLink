@@ -61,7 +61,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 migrations/
-static/
+trend_link/trend_link/static/
 
 # Flask stuff:
 instance/
