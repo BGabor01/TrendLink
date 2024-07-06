@@ -5,6 +5,7 @@ A social media platform written in Django, that uses recommendation algorithms f
 - [Features](#features)
 - [Requirements](#requirements)
 - [Preparation](#preparation)
+- [Docker configuration]($docker-configuration)
 
 
 ## Features
@@ -55,3 +56,18 @@ A social media platform written in Django, that uses recommendation algorithms f
     ```bash
     python manage.py createsuperuser
     ```
+
+## Docker Configuration
+**Database (PostgreSQL)**
+- The docker-compose.yml file sets up a PostgreSQL database container. Make sure the .env file contains the correct database configuration:
+
+```bash
+POSTGRES_DB=your_db_name
+POSTGRES_USER=your_db_user
+POSTGRES_PASSWORD=your_db_password
+```
+
+**Nginx**
+- Nginx is used as a reverse proxy to serve the Django application.
+- The configuration file is located at ```trend_link/nginx.conf``.
+- The Docker Compose setup maps this configuration file to the Nginx container.
