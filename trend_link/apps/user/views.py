@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import SingUpForm, LoginForm
+from .forms import SingUpForm, LoginForm, UpdateProfileForm
 
 
 class SingUpView(View):
@@ -43,19 +43,31 @@ class LoginView(View):
         return render(request, self.template_name, {"form": form})
 
 
+class LogoutView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        logout(request)
+        return redirect("home")
+
+
 class ProfileView(LoginRequiredMixin, View):
+    form_class = UpdateProfileForm
+
     def get(self, request):
         from apps.user.models import UserProfile
 
         profile = get_object_or_404(UserProfile, user=request.user)
         return render(request, "user/profile.html", {"profile": profile})
 
-
-class LogoutView(LoginRequiredMixin, View):
-
     def post(self, request):
-        logout(request)
-        return redirect("home")
+        from apps.user.models import UserProfile
+
+        profile = get_object_or_404(UserProfile, user=request.user)
+        form = self.form_class(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")
+        return render(request, self.template_name, {"profile": profile, "form": form})
 
 
 class HomeView(View):
