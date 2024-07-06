@@ -18,6 +18,12 @@
             <p><strong>Bio:</strong> {{ profile.bio }}</p>
             <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
         </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="profile_picture" required>
+            <button type="submit">Upload Profile Picture</button>
+        </form>
     </div>
+
 </body>
 </html>
