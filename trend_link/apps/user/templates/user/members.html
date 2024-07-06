@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profiles</title>
+    <link rel="stylesheet" href="{% static 'user/members.css' %}">
+</head>
+<body>
+    <div class="profiles-container">
+        <h1>User Profiles</h1>
+        <div class="profiles-list">
+            {% for profile in members %}
+                <div class="profile-card">
+                    <div class="profile-picture">
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}'s profile picture">
+                    </div>
+                    <div class="profile-details">
+                        <p><strong>Username:</strong> {{ profile.user.username }}</p>
+                        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                        <a href="{% url 'profile' profile.user.id %}">View Profile</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
