@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views import View
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,11 +10,11 @@ class SingUpView(View):
     form_class = SingUpForm
     template_name = "user/singup.html"
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = self.form_class()
         return render(request, self.template_name, {"form": form})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save()
@@ -29,11 +29,11 @@ class LoginView(View):
     form_class = LoginForm
     template_name = "user/login.html"
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = self.form_class()
         return render(request, self.template_name, {"form": form})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.form_class(data=request.POST)
 
         if form.is_valid():
@@ -47,27 +47,39 @@ class LogoutView(LoginRequiredMixin, View):
 
     def post(self, request):
         logout(request)
-        return redirect("home")
+        return redirect("login")
 
 
 class ProfileView(LoginRequiredMixin, View):
     form_class = UpdateProfileForm
+    template_name = "user/profile.html"
+
+    def get(self, request, id):
+        from apps.user.models import UserProfile
+
+        profile = get_object_or_404(UserProfile, user=id)
+        form = UpdateProfileForm(instance=request.user.profile)
+        return render(request, "user/profile.html", {"profile": profile, "form": form})
+
+    def post(self, request, id):
+        from apps.user.models import UserProfile
+
+        profile = get_object_or_404(UserProfile, user=id)
+        form = self.form_class(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile", id=id)
+        return render(request, self.template_name, {"profile": profile, "form": form})
+
+
+class ListMembersView(LoginRequiredMixin, View):
+    template_name = "user/members.html"
 
     def get(self, request):
         from apps.user.models import UserProfile
 
-        profile = get_object_or_404(UserProfile, user=request.user)
-        return render(request, "user/profile.html", {"profile": profile})
-
-    def post(self, request):
-        from apps.user.models import UserProfile
-
-        profile = get_object_or_404(UserProfile, user=request.user)
-        form = self.form_class(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect("profile")
-        return render(request, self.template_name, {"profile": profile, "form": form})
+        members = UserProfile.objects.all().exclude(user=request.user)
+        return render(request, self.template_name, {"members": members})
 
 
 class HomeView(View):
