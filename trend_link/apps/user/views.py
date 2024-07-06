@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import SingUpForm, LoginForm
 
@@ -33,13 +34,28 @@ class LoginView(View):
         return render(request, self.template_name, {"form": form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(data=request.POST)
 
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             return redirect("home")
         return render(request, self.template_name, {"form": form})
+
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        from apps.user.models import UserProfile
+
+        profile = get_object_or_404(UserProfile, user=request.user)
+        return render(request, "user/profile.html", {"profile": profile})
+
+
+class LogoutView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        logout(request)
+        return redirect("home")
 
 
 class HomeView(View):
