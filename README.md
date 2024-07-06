@@ -69,5 +69,5 @@ POSTGRES_PASSWORD=your_db_password
 
 **Nginx**
 - Nginx is used as a reverse proxy to serve the Django application.
-- The configuration file is located at ```trend_link/nginx.conf``.
+- The configuration file is located at ```trend_link/nginx.conf```.
 - The Docker Compose setup maps this configuration file to the Nginx container.
