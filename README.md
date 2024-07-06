@@ -5,7 +5,7 @@ A social media platform written in Django, that uses recommendation algorithms f
 - [Features](#features)
 - [Requirements](#requirements)
 - [Preparation](#preparation)
-- [Docker configuration]($docker-configuration)
+- [Docker configuration](#docker-configuration)
 
 
 ## Features
