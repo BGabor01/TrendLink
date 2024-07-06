@@ -7,13 +7,16 @@
 <body>
     <h2>Welcome</h2>
     {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}">
+        <a href="{% url 'profile'  user.id %}">
             <button>View Profile</button>
         </a>
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
+        <a href="{% url 'members' %}">
+            <button>Who can I know?</button>
+        </a>
 
     {% endif %}
 </body>
