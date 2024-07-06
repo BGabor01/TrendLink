@@ -90,3 +90,21 @@ body {
     font-size: 16px;
     color: #6c757d;
 }
+
+
+.signup-form-container p .helptext {
+
+    font-size: 0.8em; 
+    color: #6c757d;
+    margin-left: 15px;
+}
+
+.signup-form-container ul {
+    font-size: 0.8em;
+    color: #6c757d;;
+    background-color: #f9f9f9; 
+    border: 1px solid #ccc; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin: 15px 0; 
+}
