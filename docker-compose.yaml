@@ -25,13 +25,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
     volumes:
       - ./trend_link/nginx.conf:/etc/nginx/conf.d/default.conf
-    
+      - ./trend_link/trend_link/static:/app/trend_link/trend_link/static
+      - ./trend_link/trend_link/media:/app/trend_link/trend_link/media
+    depends_on:
+      - django
+
 volumes:
   postgres_data:
