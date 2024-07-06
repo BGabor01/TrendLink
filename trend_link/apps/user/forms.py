@@ -26,3 +26,12 @@ class LoginForm(AuthenticationForm):
             attrs={"placeholder": "Password", "class": "form-control"}
         ),
     )
+
+
+class UpdateProfileForm(forms.ModelForm):
+
+    class Meta:
+        from apps.user.models import UserProfile
+
+        model = UserProfile
+        fields = ["bio", "birth_date", "profile_picture"]
