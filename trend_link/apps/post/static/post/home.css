@@ -1,0 +1,163 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.home-container {
+    width: 80%;
+    max-width: 1200px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    padding: 20px;
+}
+
+.sidebar {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 20px;
+}
+
+.sidebar h2 {
+    text-align: left;
+}
+
+.sidebar a, .sidebar form {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.sidebar a, .sidebar form button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    text-decoration: none;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+    background-color: #0056b3;
+}
+
+
+.content {
+    width: 75%;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-card {
+    width: 70%;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.post-card .profile-picture img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.post-card strong {
+    font-size: 18px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.post-card .post-content {
+    margin: 10px 0;
+}
+
+.post-card img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .step-links {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination .step-links a,
+.pagination .step-links .current {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+
+.pagination .step-links .current {
+    background-color: #0056b3;
+}
+
+#updateForm {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#updateForm div {
+    margin-bottom: 10px;
+}
+
+#updateForm label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#updateForm input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
