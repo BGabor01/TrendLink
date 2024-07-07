@@ -5,8 +5,8 @@ from apps.post.forms import PostForm, ListPostForm
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):
-    form_class = PostForm
     template_name = "post/post.html"
+    form_class = PostForm
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -19,11 +19,12 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 class ListPostView(LoginRequiredMixin, ListView):
     from apps.post.models import Post
 
+    template_name = "post/home.html"
     form_class = ListPostForm
     queryset = Post.objects.all()
-    ordering = ["-created_at"]
     paginate_by = 10
     context_object_name = "posts"
+    ordering = ["-created_at"]
 
     def get_success_url(self):
         return redirect("home").url
@@ -39,8 +40,8 @@ class PostView(LoginRequiredMixin, UpdateView):
     from apps.post.models import Post
 
     model = Post
-    form_class = PostForm
     template_name = "post/post.html"
+    form_class = PostForm
     queryset = Post.objects.all()
 
     def get_success_url(self):
