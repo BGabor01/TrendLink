@@ -3,7 +3,7 @@
 set -e
 
 echo "===================== Migration session started ====================="
-python manage.py makemigrations user
+python manage.py makemigrations user post
 python manage.py migrate
 echo "===================== Migration session finished ====================="
 
