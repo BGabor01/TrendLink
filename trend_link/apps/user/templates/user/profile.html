@@ -24,13 +24,13 @@
         {% if user == profile.user %}
             <form id="uploadForm" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="hidden" name="id" value="{{ profile.user.id }}">
+                <input type="hidden" name="pk" value="{{ profile.user.id }}">
                 <input type="file" id="fileInput" name="profile_picture" style="display: none;" required>
                 <button type="button" onclick="document.getElementById('fileInput').click();">Upload Profile Picture</button>
             </form>
             <form id="updateForm", method="post">
                 {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ profile.user.id }}">
+                <input type="hidden" name="pk" value="{{ profile.user.id }}">
                 <div>
                     <label for="id_bio">Bio:</label>
                     {{ form.bio }}
