@@ -85,6 +85,15 @@ class ListMembersView(LoginRequiredMixin, ListView):
 
         return UserProfile.objects.all().exclude(user=self.request.user)
 
+    def get_success_url(self):
+        return redirect("members").url
+
+    def get_permission_denied_message(self) -> str:
+        return "You have to be logged in to check a profile!"
+
+    def get_login_url(self) -> str:
+        return "login"
+
 
 class HomeView(View):
     def get(self, request):
