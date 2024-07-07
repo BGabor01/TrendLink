@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import SingUpForm, LoginForm, UpdateProfileForm
+from .permissions import IsUserProfileOwnerMixin
 
 
 class SingUpView(View):
@@ -51,26 +52,22 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect("login")
 
 
-class ProfileView(LoginRequiredMixin, View):
+class ProfileView(LoginRequiredMixin, IsUserProfileOwnerMixin, View):
     form_class = UpdateProfileForm
     template_name = "user/profile.html"
 
-    def get(self, request, id):
-        from apps.user.models import UserProfile
+    def get(self, request, id, obj):
+        form = None
+        if request.user == obj.user:
+            form = UpdateProfileForm(instance=request.user.profile)
+        return render(request, self.template_name, {"profile": obj, "form": form})
 
-        profile = get_object_or_404(UserProfile, user=id)
-        form = UpdateProfileForm(instance=request.user.profile)
-        return render(request, "user/profile.html", {"profile": profile, "form": form})
-
-    def post(self, request, id):
-        from apps.user.models import UserProfile
-
-        profile = get_object_or_404(UserProfile, user=id)
-        form = self.form_class(request.POST, request.FILES, instance=profile)
+    def post(self, request, id, obj):
+        form = self.form_class(request.POST, request.FILES, instance=obj)
         if form.is_valid():
             form.save()
             return redirect("profile", id=id)
-        return render(request, self.template_name, {"profile": profile, "form": form})
+        return render(request, self.template_name, {"profile": obj, "form": form})
 
 
 class ListMembersView(LoginRequiredMixin, ListView):
