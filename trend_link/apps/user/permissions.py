@@ -10,7 +10,7 @@ class UserIsOwner:
         if not self.model:
             raise ValueError("Model attribute must be set")
 
-        obj = get_object_or_404(self.model, id=kwargs["id"])
+        obj = get_object_or_404(self.model, pk=kwargs["pk"])
         if (
             request.method not in ["GET", "HEAD", "OPTIONS", "TRACE"]
             and getattr(obj, self.user_field) != request.user
