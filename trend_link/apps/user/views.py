@@ -93,8 +93,3 @@ class ListMembersView(LoginRequiredMixin, ListView):
 
     def get_login_url(self) -> str:
         return "login"
-
-
-class HomeView(View):
-    def get(self, request):
-        return render(request, "user/home.html")
