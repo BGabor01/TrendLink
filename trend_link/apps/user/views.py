@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import SingUpForm, LoginForm, UpdateProfileForm
-from .permissions import IsUserProfileOwnerMixin
+from apps.user.forms import SingUpForm, LoginForm, UpdateProfileForm
+from apps.user.permissions import IsUserProfileOwnerMixin
 
 
 class SingUpView(View):
@@ -41,6 +42,11 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            next_url = request.GET.get("next")
+            if next_url and url_has_allowed_host_and_scheme(
+                next_url, allowed_hosts={request.get_host()}
+            ):
+                return redirect(next_url)
             return redirect("home")
         return render(request, self.template_name, {"form": form})
 
@@ -52,22 +58,22 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect("login")
 
 
-class ProfileView(LoginRequiredMixin, IsUserProfileOwnerMixin, View):
+class ProfileView(LoginRequiredMixin, IsUserProfileOwnerMixin, UpdateView):
+    from apps.user.models import UserProfile
+
+    model = UserProfile
     form_class = UpdateProfileForm
     template_name = "user/profile.html"
+    context_object_name = "profile"
 
-    def get(self, request, id, obj):
-        form = None
-        if request.user == obj.user:
-            form = UpdateProfileForm(instance=request.user.profile)
-        return render(request, self.template_name, {"profile": obj, "form": form})
+    def get_success_url(self):
+        return redirect("profile", pk=self.object.id).url
 
-    def post(self, request, id, obj):
-        form = self.form_class(request.POST, request.FILES, instance=obj)
-        if form.is_valid():
-            form.save()
-            return redirect("profile", id=id)
-        return render(request, self.template_name, {"profile": obj, "form": form})
+    def get_permission_denied_message(self) -> str:
+        return "You have to be logged in to check a profile!"
+
+    def get_login_url(self) -> str:
+        return "login"
 
 
 class ListMembersView(LoginRequiredMixin, ListView):
