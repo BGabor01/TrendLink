@@ -11,7 +11,7 @@ $(document).ready(function() {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function(response) {
-                const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+                const redirectUrl = localStorage.getItem('redirectAfterLogin');
                 if (redirectUrl !== null){
                     localStorage.removeItem('redirectAfterLogin');
                     window.location.href = redirectUrl;
