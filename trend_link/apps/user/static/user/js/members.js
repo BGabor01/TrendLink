@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    function loadProfiles(membersUrl, profileDetailsUrl) {
+    function loadProfiles(membersUrl, membersUrlApi, profileDetailsUrl, loginUrl) {
         $.ajax({
-            url: membersUrl,
+            url: membersUrlApi,
             type: 'GET',
             success: function(response) {
                 var profilesList = $('#profiles-list');
@@ -25,11 +25,19 @@ $(document).ready(function() {
                 });
             },
             error: function(response) {
-                alert('An error occurred while retrieving the profiles.');
+                if (response.status === 403) {
+                    localStorage.setItem('redirectAfterLogin', membersUrl);
+                    window.location.href = loginUrl;
+                } else {
+                    alert('An error occurred while retrieving the profiles.');
+                }
+
             }
         });
     }
-    var membersUrl = $('#members-url').data('url');
-    var profileDetailsUrl = $('#profile-details').data('url');
-    loadProfiles(membersUrl, profileDetailsUrl);
+    let profileDetailsUrl = $('#profile-details').data('url');
+    const membersUrlApi = $('#members-url-api').data('url');
+    const membersUrl = $('#members-url').data('url');
+    const loginUrl = $('#login-url').data('url');
+    loadProfiles(membersUrl, membersUrlApi, profileDetailsUrl, loginUrl);
 });
