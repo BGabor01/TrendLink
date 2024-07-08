@@ -14,7 +14,9 @@
         <div class="profiles-list" id="profiles-list">
         </div>
     </div>
-    <div id="members-url" data-url="{% url 'members-api' %}" style="display:none;"></div>
+    <div id="members-url-api" data-url="{% url 'members-api' %}" style="display:none;"></div>
+    <div id="members-url" data-url="{% url 'members' %}" style="display:none;"></div>
     <div id="profile-details" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
+    <div id="login-url" data-url="{% url 'login' %}" style="display:none;"></div>
 </body>
 </html>
