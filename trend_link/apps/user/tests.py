@@ -1,11 +1,13 @@
 import pytest
 from django.contrib.auth.models import User
-from django.views import View
-from django.http import HttpResponse
 from django.test import RequestFactory
-from django.core.exceptions import PermissionDenied
+from rest_framework.test import force_authenticate
+from rest_framework import generics, mixins
+from rest_framework.permissions import IsAuthenticated
 
-from apps.user.permissions import IsUserProfileOwnerMixin
+from apps.user.permissions import IsOwner
+from apps.user.serializers import ProfileSerializer
+from apps.user.models import UserProfile
 
 
 @pytest.fixture
@@ -18,16 +20,21 @@ def test_profile_creating_signal(user):
     from apps.user.models import UserProfile
 
     profile = UserProfile.objects.get(user=user)
-
     assert profile
 
 
-class TestView(IsUserProfileOwnerMixin, View):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse("User is owner!")
+class TestView(
+    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView
+):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = UserProfile.objects.all()
 
-    def post(self, request, *args, **kwargs):
-        return HttpResponse("User is owner!")
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 @pytest.fixture
@@ -40,45 +47,42 @@ def factory():
     return RequestFactory()
 
 
-def test_permission_denied_if_not_owner_POST(factory, other_user, user):
+def test_permission_denied_if_not_owner_PUT(factory, other_user, user):
     from apps.user.models import UserProfile
 
-    request = factory.get("/fake-url")
+    data = {"bio": "Updated bio", "birth_date": "2000-01-01"}
+    request = factory.put("/fake-url", data, content_type="application/json")
     request.user = other_user
-    request.method = "POST"
     profile = UserProfile.objects.get(user=user)
 
     view = TestView.as_view()
-
-    with pytest.raises(PermissionDenied):
-        view(request, pk=profile.pk)
-
-
-def test_access_granted_GET(factory, other_user, user):
-    from apps.user.models import UserProfile
-
-    request = factory.get("/fake-url")
-    request.user = other_user
-    request.method = "GET"
-    profile = UserProfile.objects.get(user=user)
-
-    view = TestView.as_view()
-
+    force_authenticate(request, user=other_user)
     response = view(request, pk=profile.pk)
-    assert response.status_code == 200
+    assert response.status_code == 403
 
 
-def test_access_granted_POST(factory, user):
+def test_access_granted_GET(factory, user):
     from apps.user.models import UserProfile
 
     request = factory.get("/fake-url")
     request.user = user
-    request.method = "POST"
     profile = UserProfile.objects.get(user=user)
 
     view = TestView.as_view()
-
+    force_authenticate(request, user=user)
     response = view(request, pk=profile.pk)
-
     assert response.status_code == 200
-    assert response.content.decode() == "User is owner!"
+
+
+def test_access_granted_PUT(factory, user):
+    from apps.user.models import UserProfile
+
+    data = {"bio": "Updated bio", "birth_date": "2000-01-01"}
+    request = factory.put("/fake-url", data, content_type="application/json")
+    request.user = user
+    profile = UserProfile.objects.get(user=user)
+
+    view = TestView.as_view()
+    force_authenticate(request, user=user)
+    response = view(request, pk=profile.pk)
+    assert response.status_code == 200
