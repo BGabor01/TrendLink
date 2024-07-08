@@ -6,15 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
     <link rel="stylesheet" href="{% static 'post/css/post.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'post/js/post.js' %}"></script>
 </head>
 <body>
     <div class="form-container">
         <h1>Post</h1>
-        <form method="post" enctype="multipart/form-data">
+        <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'create-post-api' %}">
             {% csrf_token %}
-            <label for="id_text">Text:</label>
-            {{ form.text }}
-            {{ form.image }}
+           <div>
+                <label for="text">Text</label>
+                <textarea id="text" name="text" rows="5" cols="50"></textarea>
+            </div>
+            <div>
+                <label for="fileInput">Image:</label>
+                <input type="file" id="fileInput" name="profile_picture">
+            </div>
             <input type="submit" value="Post">
         </form>
     </div>
