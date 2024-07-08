@@ -11,7 +11,15 @@ $(document).ready(function() {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function(response) {
-                window.location.href = "/home";
+                const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+                if (redirectUrl !== null){
+                    localStorage.removeItem('redirectAfterLogin');
+                    window.location.href = redirectUrl;
+                }
+                else{
+                    window.location.href = "/home";
+                }
+                
             },
             error: function(response) {
                 var errors = response.responseJSON;
