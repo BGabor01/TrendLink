@@ -49,17 +49,18 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "email"]
-
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
 
     class Meta:
         from apps.user.models import UserProfile
 
         model = UserProfile
         fields = "__all__"
+
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "profile"]
