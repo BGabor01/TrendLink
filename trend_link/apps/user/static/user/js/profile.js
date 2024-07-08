@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     function getUserIdFromPath() {
         let pathArray = window.location.pathname.split('/');
         return pathArray[pathArray.length - 2];
     }
 
     const userId = getUserIdFromPath();
-    const currentUserId = $('#current-user-id').data('id'); 
+    const currentUserId = $('#current-user-id').data('id');
 
     const retrieveUrlApi = $('#retrieve-url-api').data('url').replace('0', userId);
     const retrieveUrl = $('#retrieve-url').data('url').replace('0', userId);
@@ -15,32 +15,31 @@ $(document).ready(function() {
     $.ajax({
         url: retrieveUrlApi,
         type: 'GET',
-        success: function(response) {
-            $('#username').text(response.user.username + "'s Profile");
-            $('#profile-picture').attr('src', response.profile_picture);
-            $('#user-username').text(response.user.username);
-            $('#user-email').text(response.user.email);
-            $('#user-bio').text(response.bio);
-            $('#user-birth-date').text(response.birth_date);
-            $('#id_bio').val(response.bio);
-            $('#id_birth_date').val(response.birth_date);
+        success: function (response) {
+            $('#profile-picture').attr('src', response.profile.profile_picture);
+            $('#user-username').text(response.username);
+            $('#user-email').text(response.email);
+            $('#user-bio').text(response.profile.bio);
+            $('#user-birth-date').text(response.profile.birth_date);
+            $('#id_bio').val(response.profile.bio);
+            $('#id_birth_date').val(response.profile.birth_date);
 
             if (currentUserId == userId) {
                 $('#edit-button').show();
                 $('#uploadForm').show();
             }
         },
-        error: function(response) {
+        error: function (response) {
             if (response.status === 403) {
-                    localStorage.setItem('redirectAfterLogin', retrieveUrl);
-                    window.location.href = loginUrl;
+                localStorage.setItem('redirectAfterLogin', retrieveUrl);
+                window.location.href = loginUrl;
             } else {
                 alert('An error occurred while retrieving the profiles.');
             }
         }
     });
 
-    $('#fileInput').change(function() {
+    $('#fileInput').change(function () {
         var formData = new FormData($('#uploadForm')[0]);
         $.ajax({
             url: updateUrl,
@@ -51,16 +50,16 @@ $(document).ready(function() {
             headers: {
                 'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
             },
-            success: function(response) {
+            success: function (response) {
                 $('#profile-picture').attr('src', response.profile_picture);
             },
-            error: function(response) {
+            error: function (response) {
                 alert('An error occurred while uploading the profile picture.');
             }
         });
     });
 
-    $('#updateForm').submit(function(e) {
+    $('#updateForm').submit(function (e) {
         e.preventDefault();
         $.ajax({
             url: updateUrl,
@@ -69,12 +68,12 @@ $(document).ready(function() {
             headers: {
                 'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
             },
-            success: function(response) {
+            success: function (response) {
                 $('#user-bio').text(response.bio);
                 $('#user-birth-date').text(response.birth_date);
                 $('#updateForm').hide();
             },
-            error: function(response) {
+            error: function (response) {
                 alert('An error occurred while updating the profile.');
             }
         });
