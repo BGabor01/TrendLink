@@ -1,17 +1,19 @@
 $(document).ready(function() {
     function getUserIdFromPath() {
-        var pathArray = window.location.pathname.split('/');
+        let pathArray = window.location.pathname.split('/');
         return pathArray[pathArray.length - 2];
     }
 
-    var userId = getUserIdFromPath();
-    var currentUserId = $('#current-user-id').data('id'); 
+    const userId = getUserIdFromPath();
+    const currentUserId = $('#current-user-id').data('id'); 
 
-    var retrieveUrl = $('#retrieve-url').data('url').replace('0', userId);
-    var updateUrl = $('#update-url').data('url').replace('0', userId);
+    const retrieveUrlApi = $('#retrieve-url-api').data('url').replace('0', userId);
+    const retrieveUrl = $('#retrieve-url').data('url').replace('0', userId);
+    const updateUrl = $('#update-url').data('url').replace('0', userId);
+    const loginUrl = $('#login-url').data('url');
 
     $.ajax({
-        url: retrieveUrl,
+        url: retrieveUrlApi,
         type: 'GET',
         success: function(response) {
             $('#username').text(response.user.username + "'s Profile");
@@ -29,7 +31,12 @@ $(document).ready(function() {
             }
         },
         error: function(response) {
-            alert('An error occurred while retrieving the profile data.');
+            if (response.status === 403) {
+                    localStorage.setItem('redirectAfterLogin', retrieveUrl);
+                    window.location.href = loginUrl;
+            } else {
+                alert('An error occurred while retrieving the profiles.');
+            }
         }
     });
 
