@@ -19,13 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls import static
-from apps.post.views import ListPostView
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("user/", include("apps.user.urls")),
     path("post/", include("apps.post.urls")),
-    path("home/", ListPostView.as_view(), name="home"),
+    path("home/", TemplateView.as_view(template_name = "post/home.html"), name="home"),
 ]
 
 if settings.DEBUG:
