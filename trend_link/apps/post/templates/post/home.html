@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="{% static 'post/home.css' %}">
+    <link rel="stylesheet" href="{% static 'post/css/home.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'post/js/home.js' %}"></script>
 </head>
 <body>
     <div class="home-container">
@@ -38,25 +40,25 @@
                         {% if user == post.user %}
                             <a href="{% url 'post' post.id %}">Edit post</a>
                         {% endif %}
+                        <div class="comments-section">
+                            <p><strong>Comments:</strong></p>
+                            <div class="comments">
+                                {% for comment in post.comments.all %}
+                                    <div class="comment">
+                                        <p>{{ comment.text }}</p>
+                                        <p><small>by {{ comment.user.username }} on {{ comment.created_at|date:"F j, Y, g:i a" }}</small></p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <form class="commentForm" method="post" action="{% url 'create-comment' pk=post.id %}">
+                                {% csrf_token %}
+                                <label for="id_text">Comment:</label>
+                                <input type="text" id="id_text" name="text">
+                                <button type="submit">Update</button>
+                            </form>
+                        </div>
                     </div>
                 {% endfor %}
-            </div>
-            <div class="pagination">
-                <div class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </div>
