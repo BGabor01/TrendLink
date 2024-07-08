@@ -8,8 +8,10 @@ from apps.user.serializers import (
     SignUpSerializer,
     LoginSerializer,
     ProfileSerializer,
+    UserSerializer,
 )
 from apps.user.permissions import IsOwner
+from apps.user.models import User, UserProfile
 
 
 class SignUpView(generics.CreateAPIView):
@@ -46,7 +48,6 @@ class LogoutView(generics.GenericAPIView):
 
 
 class UpdateProfileView(generics.UpdateAPIView):
-    from apps.user.models import UserProfile
 
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsOwner]
@@ -55,22 +56,21 @@ class UpdateProfileView(generics.UpdateAPIView):
 
 
 class RetrieveProfileView(generics.RetrieveAPIView):
-    from apps.user.models import UserProfile
-
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
-    queryset = UserProfile.objects.all().select_related("user")
+    
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = User.objects.all().select_related("profile")
     lookup_field = "pk"
 
 
 class ListMembersView(generics.ListAPIView):
 
-    serializer_class = ProfileSerializer
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        from apps.user.models import UserProfile
+        from apps.user.models import User
 
-        return UserProfile.objects.exclude(user=self.request.user).select_related(
-            "user"
+        return User.objects.exclude(id = self.request.user.id).select_related(
+            "profile"
         )
