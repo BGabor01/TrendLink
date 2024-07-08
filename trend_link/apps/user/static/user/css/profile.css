@@ -6,6 +6,22 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
+}
+
+.home-link {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+
+.home-link:hover {
+    background-color: #0056b3;
 }
 
 .profile-container {
@@ -45,6 +61,20 @@ body {
 
 .profile-details p strong {
     color: #000;
+}
+
+a, .profile-container button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+a:hover, .profile-container button:hover {
+    background-color: #0056b3;
 }
 
 form {
