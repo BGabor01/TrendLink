@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="{% static 'user/login.css' %}">
+    <link rel="stylesheet" href="{% static 'user/css/login.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'user/js/login.js' %}"></script>
 </head>
 <body>
     <div class="login-container">
@@ -15,12 +17,20 @@
         <div class="right">
             <div class="login-form-container">
                 <h2>Login</h2>
-                <form method="post">
+                <form id="loginForm" action="{% url 'login-api' %}" data-url="{% url 'login-api' %}">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <div>
+                        <label for="id_username">Username:</label>
+                        <input type="text" id="id_username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="id_password">Password:</label>
+                        <input type="password" id="id_password" name="password" required>
+                    </div>
                     <button type="submit">Login</button>
                 </form>
-                <p>Don't have an account? <a href="{% url 'singup' %}">Create one here</a></p>
+                <p>Don't have an account? <a href="{% url 'signup' %}">Create one here</a></p>
+                <div id="error-message" style="color: red;"></div>
             </div>
         </div>
     </div>

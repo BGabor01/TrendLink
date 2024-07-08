@@ -4,54 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
-    <link rel="stylesheet" href="{% static 'user/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'user/css/profile.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'user/js/profile.js' %}"></script>
 </head>
 <body>
     <div class="profile-container">
-        <h1>{{ profile.user.username }}'s Profile</h1>
+        <h1 id="username"></h1>
         <div class="profile-picture">
-            <img src="{{ profile.profile_picture.url }}">
+            <img id="profile-picture" src="" alt="Profile Picture">
         </div>
         <div class="profile-details">
-            <p><strong>Username:</strong> {{ profile.user.username }}</p>
-            <p><strong>Email:</strong> {{ profile.user.email }}</p>
-            <p><strong>Bio:</strong> {{ profile.bio }}</p>
-            <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
-            {% if user == profile.user %}
-                <button type="button" onclick="showEditForm()">Edit</button>
-            {% endif %}
+            <p><strong>Username:</strong> <span id="user-username"></span></p>
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Bio:</strong> <span id="user-bio"></span></p>
+            <p><strong>Birth Date:</strong> <span id="user-birth-date"></span></p>
+            <button type="button" id="edit-button" style="display:none;" onclick="toggleEditForm()">Edit</button>
         </div>
-        {% if user == profile.user %}
-            <form id="uploadForm" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="pk" value="{{ profile.user.id }}">
-                <input type="file" id="fileInput" name="profile_picture" style="display: none;" required>
-                <button type="button" onclick="document.getElementById('fileInput').click();">Upload Profile Picture</button>
-            </form>
-            <form id="updateForm", method="post">
-                {% csrf_token %}
-                <input type="hidden" name="pk" value="{{ profile.user.id }}">
-                <div>
-                    <label for="id_bio">Bio:</label>
-                    {{ form.bio }}
-                </div>
-                <div>
-                    <label for="id_birth_date">Birth Date:</label>
-                    {{ form.birth_date }}
-                </div>
-                <button type="submit">Update</button>
-            </form>
-        {% endif %}
+        <form id="uploadForm" method="post" enctype="multipart/form-data" style="display:none;">
+            {% csrf_token %}
+            <input type="file" id="fileInput" name="profile_picture" style="display: none;" required>
+            <button type="button" onclick="document.getElementById('fileInput').click();">Upload Profile Picture</button>
+        </form>
+        <form id="updateForm" method="post" style="display:none;">
+            {% csrf_token %}
+            <div>
+                <label for="id_bio">Bio:</label>
+                <textarea id="id_bio" name="bio"></textarea>
+            </div>
+            <div>
+                <label for="id_birth_date">Birth Date:</label>
+                <input type="date" id="id_birth_date" name="birth_date">
+            </div>
+            <button type="submit">Update</button>
+        </form>
     </div>
-
-    <script>
-        function showEditForm() {
-            document.getElementById('updateForm').style.display = 'block';
-        }
-
-        document.getElementById('fileInput').addEventListener('change', function() {
-            document.getElementById('uploadForm').submit();
-        });
-    </script>
+    <div id="current-user-id" data-id="{{ user.id }}" style="display:none;"></div>
+    <div id="retrieve-url" data-url="{% url 'profile-retrieve-api' 0 %}" style="display:none;"></div>
+    <div id="update-url" data-url="{% url 'profile-update-api' 0 %}" style="display:none;"></div>
 </body>
 </html>
