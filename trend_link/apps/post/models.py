@@ -31,6 +31,12 @@ class Comment(models.Model):
         related_name="comments",
         related_query_name="comments",
     )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        related_query_name="comments",
+    )
     text = models.CharField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
