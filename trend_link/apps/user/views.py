@@ -1,95 +1,76 @@
-from django.shortcuts import render, redirect
-from django.views import View
-from django.views.generic import ListView, UpdateView
+from django.shortcuts import redirect
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.http import url_has_allowed_host_and_scheme
 
-from apps.user.forms import SingUpForm, LoginForm, UpdateProfileForm
-from apps.user.permissions import IsUserProfileOwnerMixin
+from apps.user.serializers import (
+    SignUpSerializer,
+    LoginSerializer,
+    ProfileSerializer,
+)
+from apps.user.permissions import IsOwner
 
 
-class SingUpView(View):
-    form_class = SingUpForm
-    template_name = "user/singup.html"
+class SignUpView(generics.CreateAPIView):
+    serializer_class = SignUpSerializer
+    permission_classes = [AllowAny]
 
-    def get(self, request):
-        form = self.form_class()
-        return render(request, self.template_name, {"form": form})
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        user = authenticate(
+            username=response.data["username"], password=request.data["password1"]
+        )
+        if user:
+            login(request, user)
+        return response
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user = form.save()
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-            return redirect("home")
-        return render(request, self.template_name, {"form": form})
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        login(request, user)
+        return Response({"detail": "Login successful."}, status=status.HTTP_200_OK)
 
 
-class LoginView(View):
-    form_class = LoginForm
-    template_name = "user/login.html"
-
-    def get(self, request):
-        form = self.form_class()
-        return render(request, self.template_name, {"form": form})
-
-    def post(self, request):
-        form = self.form_class(data=request.POST)
-
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            next_url = request.GET.get("next")
-            if next_url and url_has_allowed_host_and_scheme(
-                next_url, allowed_hosts={request.get_host()}
-            ):
-                return redirect(next_url)
-            return redirect("home")
-        return render(request, self.template_name, {"form": form})
-
-
-class LogoutView(LoginRequiredMixin, View):
+class LogoutView(generics.GenericAPIView):
 
     def post(self, request):
         logout(request)
         return redirect("login")
 
 
-class ProfileView(LoginRequiredMixin, IsUserProfileOwnerMixin, UpdateView):
+class UpdateProfileView(generics.UpdateAPIView):
     from apps.user.models import UserProfile
 
-    model = UserProfile
-    form_class = UpdateProfileForm
-    template_name = "user/profile.html"
-    context_object_name = "profile"
-
-    def get_success_url(self):
-        return redirect("profile", pk=self.object.id).url
-
-    def get_permission_denied_message(self) -> str:
-        return "You have to be logged in to check a profile!"
-
-    def get_login_url(self) -> str:
-        return "login"
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = UserProfile.objects.all().select_related("user")
+    lookup_field = "pk"
 
 
-class ListMembersView(LoginRequiredMixin, ListView):
-    template_name = "user/members.html"
-    paginate_by = 10
+class RetrieveProfileView(generics.RetrieveAPIView):
+    from apps.user.models import UserProfile
+
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = UserProfile.objects.all().select_related("user")
+    lookup_field = "pk"
+
+
+class ListMembersView(generics.ListAPIView):
+
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         from apps.user.models import UserProfile
 
-        return UserProfile.objects.all().exclude(user=self.request.user)
-
-    def get_success_url(self):
-        return redirect("members").url
-
-    def get_permission_denied_message(self) -> str:
-        return "You have to be logged in to check a profile!"
-
-    def get_login_url(self) -> str:
-        return "login"
+        return UserProfile.objects.exclude(user=self.request.user).select_related(
+            "user"
+        )
