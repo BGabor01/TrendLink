@@ -4,6 +4,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 ## Table of Contents
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Applications](#applications)
 - [Requirements](#requirements)
 - [Preparation](#preparation)
 - [Docker configuration](#docker-configuration)
@@ -15,6 +16,10 @@ A social media platform, that uses recommendation algorithms for personalized co
 - Profile Management
 - Post Creation and Management
 - Comment Creation and Management
+
+## Applications
+- **User**
+- **Post**
 
 ## Tech Stack
 
