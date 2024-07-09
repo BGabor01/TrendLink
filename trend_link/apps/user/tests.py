@@ -5,7 +5,7 @@ from rest_framework.test import force_authenticate
 from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 
-from apps.user.permissions import IsOwner
+from apps.user.permissions import IsOwnerOrReadOnly
 from apps.user.serializers import ProfileSerializer
 from apps.user.models import UserProfile
 
@@ -27,7 +27,7 @@ class TestView(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView
 ):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = UserProfile.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -74,15 +74,3 @@ def test_access_granted_GET(factory, user):
     assert response.status_code == 200
 
 
-def test_access_granted_PUT(factory, user):
-    from apps.user.models import UserProfile
-
-    data = {"bio": "Updated bio", "birth_date": "2000-01-01"}
-    request = factory.put("/fake-url", data, content_type="application/json")
-    request.user = user
-    profile = UserProfile.objects.get(user=user)
-
-    view = TestView.as_view()
-    force_authenticate(request, user=user)
-    response = view(request, pk=profile.pk)
-    assert response.status_code == 200

@@ -10,7 +10,7 @@ from apps.user.serializers import (
     ProfileSerializer,
     UserSerializer,
 )
-from apps.user.permissions import IsOwner
+from apps.user.permissions import IsOwnerOrReadOnly
 from apps.user.models import User, UserProfile
 
 
@@ -50,7 +50,7 @@ class LogoutView(generics.GenericAPIView):
 class UpdateProfileView(generics.UpdateAPIView):
 
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = UserProfile.objects.all().select_related("user")
     lookup_field = "pk"
 
@@ -58,7 +58,7 @@ class UpdateProfileView(generics.UpdateAPIView):
 class RetrieveProfileView(generics.RetrieveAPIView):
     
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = User.objects.all().select_related("profile")
     lookup_field = "pk"
 
