@@ -1,8 +1,9 @@
 # TrendLink
-A social media platform written in Django, that uses recommendation algorithms for personalized content and connections
+A social media platform, that uses recommendation algorithms for personalized content and connections
 
 ## Table of Contents
 - [Features](#features)
+- [Tech Stack](#tech-stack)
 - [Requirements](#requirements)
 - [Preparation](#preparation)
 - [Docker configuration](#docker-configuration)
@@ -12,7 +13,23 @@ A social media platform written in Django, that uses recommendation algorithms f
 
 - User Registration and Authentication
 - Profile Management
-  - Change Profile Picture
+- Post Creation and Management
+- Comment Creation and Management
+
+## Tech Stack
+
+### Backend
+- **Framework**: Django
+- **API**: Django Rest Framework (DRF)
+- **Database**: PostgreSQL
+- **Authentication**: SessionAuth
+- **Containerization**: Docker
+- **Proxy Server**: Nginx
+
+### Frontend
+- **HTML/CSS**
+- **JavaScript**
+- **JQuery**
 
 ## Requirements
 
