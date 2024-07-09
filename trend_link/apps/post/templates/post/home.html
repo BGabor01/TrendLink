@@ -24,43 +24,15 @@
         </div>
         <div class="content">
             <h2>Posts</h2>
-            <div class="post-list">
-                {% for post in posts %}
-                    <div class="post-card">
-                        <div class="profile-picture">
-                            <img src="{{ post.user.profile.profile_picture.url }}">
-                            <strong>{{ post.user.username }}</strong>
-                        </div>
-                        {{ post.text }}
-                        {% if post.image %}
-                            <div>
-                                <img src="{{ post.image.url }}" alt="Post Image">
-                            </div>
-                        {% endif %}
-                        {% if user == post.user %}
-                            <a href="{% url 'post' post.id %}">Edit post</a>
-                        {% endif %}
-                        <div class="comments-section">
-                            <p><strong>Comments:</strong></p>
-                            <div class="comments">
-                                {% for comment in post.comments.all %}
-                                    <div class="comment">
-                                        <p>{{ comment.text }}</p>
-                                        <p><small>by {{ comment.user.username }} on {{ comment.created_at|date:"F j, Y, g:i a" }}</small></p>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <form class="commentForm" method="post" action="{% url 'create-comment' pk=post.id %}">
-                                {% csrf_token %}
-                                <label for="id_text">Comment:</label>
-                                <input type="text" id="id_text" name="text">
-                                <button type="submit">Update</button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="post-list" id="post-list">
             </div>
         </div>
     </div>
+    <div id="posts-url" data-url="{% url 'list-post-api' %}" style="display:none;"></div>
+    <div id="create-comment-url-api" data-url="{% url 'create-comment-api' %}" style="display:none;"></div>
+    <div id="delete-comment-url-api" data-url="{% url 'delete-comment-api' 0 %}" style="display:none;"></div>
+    <div id="update-comment-url-api" data-url="{% url 'update-comment-api' 0 %}" style="display:none;"></div>
+    <div id="profile-url" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
+    <div id="current-user" data-user="{{ user }}" style="display:none;"></div>
 </body>
 </html>
