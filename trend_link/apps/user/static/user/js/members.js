@@ -4,12 +4,12 @@ $(document).ready(function () {
             url: membersUrlApi,
             type: 'GET',
             success: function (response) {
-                var profilesList = $('#profiles-list');
+                const profilesList = $('#profiles-list');
                 profilesList.empty();
 
                 response.results.forEach(function (profile) {
                     profileDetailsUrl = profileDetailsUrl.replace('0', profile.id)
-                    var profileCard = `
+                    const profileCard = `
                         <div class="profile-card">
                             <div class="profile-picture">
                                 <img src="${profile.profile.profile_picture}" alt="${profile.username}'s profile picture">

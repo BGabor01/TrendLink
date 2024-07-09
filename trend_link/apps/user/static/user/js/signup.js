@@ -1,8 +1,8 @@
-$(document).ready(function() {
-    $('#signupForm').on('submit', function(e) {
+$(document).ready(function () {
+    $('#signupForm').on('submit', function (e) {
         e.preventDefault();
-        var $form = $(this);
-        var url = $form.data('url'); 
+        const $form = $(this);
+        const url = $form.data('url');
 
         $.ajax({
             type: 'POST',
@@ -11,12 +11,12 @@ $(document).ready(function() {
             headers: {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
-            success: function(response) {
+            success: function (response) {
                 window.location.href = "/home";
             },
-            error: function(response) {
-                var errors = response.responseJSON;
-                var errorMessage = '';
+            error: function (response) {
+                const errors = response.responseJSON;
+                let errorMessage = '';
                 for (var field in errors) {
                     errorMessage += errors[field] + ' ';
                 }

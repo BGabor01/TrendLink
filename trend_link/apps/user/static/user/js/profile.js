@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
 
     $('#fileInput').change(function () {
-        var formData = new FormData($('#uploadForm')[0]);
+        const formData = new FormData($('#uploadForm')[0]);
         $.ajax({
             url: updateUrl,
             type: 'PATCH',
