@@ -1,54 +1,48 @@
-from django.shortcuts import redirect
-from django.views.generic import CreateView, ListView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from apps.post.forms import PostForm, ListPostForm
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from apps.post.serializers import (
+    EditCreatePostSerializer,
+    ListPostsSerializer,
+    CreateCommentSerializer,
+    CommentSerializer,
+    UpdateCommentSerializer,
+)
+from apps.post.models import Post, Comment
+from apps.post.permissions import IsOwnerOrPostOwnerOrReadOnly
+from apps.user.permissions import IsOwnerOrReadOnly
 
 
-class CreatePostView(LoginRequiredMixin, CreateView):
-    template_name = "post/post.html"
-    form_class = PostForm
+class CreatePostView(generics.CreateAPIView):
+    serializer_class = EditCreatePostSerializer
+    permission_classes = [IsAuthenticated]
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return redirect("home").url
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
 
 
-class ListPostView(LoginRequiredMixin, ListView):
-    from apps.post.models import Post
-
-    template_name = "post/home.html"
-    form_class = ListPostForm
-    queryset = Post.objects.all()
-    paginate_by = 10
-    context_object_name = "posts"
-    ordering = ["-created_at"]
-
-    def get_success_url(self):
-        return redirect("home").url
-
-    def get_permission_denied_message(self) -> str:
-        return "You have to be logged in to check a profile!"
-
-    def get_login_url(self) -> str:
-        return "login"
+class ListPostsView(generics.ListAPIView):
+    serializer_class = ListPostsSerializer
+    queryset = Post.objects.all().prefetch_related("comments")
 
 
-class PostView(LoginRequiredMixin, UpdateView):
-    from apps.post.models import Post
+class CreateCommentView(generics.CreateAPIView):
+    serializer_class = CreateCommentSerializer
+    permission_classes = [IsAuthenticated]
 
-    model = Post
-    template_name = "post/post.html"
-    form_class = PostForm
-    queryset = Post.objects.all()
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
 
-    def get_success_url(self):
-        return redirect("home").url
 
-    def get_permission_denied_message(self) -> str:
-        return "You have to be logged in to check a profile!"
+class DeleteCommentView(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrPostOwnerOrReadOnly]
+    queryset = Comment.objects.all()
+    lookup_field = "pk"
 
-    def get_login_url(self) -> str:
-        return "login"
+
+class UpdateCommentView(generics.UpdateAPIView):
+    serializer_class = UpdateCommentSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    queryset = Comment.objects.all()
+    lookup_field = "pk"
