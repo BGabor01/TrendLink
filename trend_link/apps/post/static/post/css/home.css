@@ -161,3 +161,92 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+
+.comment {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-header img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.comment-header a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+    margin-right: auto;
+}
+
+.comment-header a:hover {
+    text-decoration: none;
+}
+
+.comment-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.comment-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.comment p {
+    margin: 5px 0;
+}
+
+.comment small {
+    display: block;
+    margin-top: 10px;
+}
+
+.post-card .profile-picture {
+    display: flex;
+    align-items: center;
+}
+
+.post-card .profile-picture img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.post-card .profile-picture a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.post-card .profile-picture a:hover {
+    text-decoration: none;
+}
