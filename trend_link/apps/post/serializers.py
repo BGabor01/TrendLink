@@ -73,12 +73,9 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CreateLikeSerializer(serializers.ModelSerializer):
+class LikePostSerializer(serializers.ModelSerializer):
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
 
     class Meta:
         model = Like
         fields = ["post"]
-
-    def to_representation(self, instance):
-        return LikeSerializer(instance).data
