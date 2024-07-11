@@ -7,6 +7,8 @@ $(document).ready(function () {
     let updateCommentUrl = $('#update-comment-url-api').data('url');
     const createLikeUrl = $('#like-post-url-api').data('url');
     let unlikeUrl = $('#unlike-post-url-api').data('url');
+    const deletePostUrl = $('#delete-post-url-api').data('url');
+    const updatePostUrl = $('#update-post-url-api').data('url');
 
     $.ajax({
         url: postsUrl,
@@ -17,7 +19,7 @@ $(document).ready(function () {
             response.results.forEach(function (post) {
                 const likedClass = post.has_liked ? 'liked' : '';
                 const postCard = `
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="${post.id}">
                         <div class="post-header">
                             <div class="profile-picture">
                                 <img src="${post.user.profile.profile_picture}" alt="Profile Picture">
@@ -125,7 +127,7 @@ $(document).ready(function () {
         commentElement.append(updateFormHtml);
     });
 
-    $(document).on('submit', '.updateForm', function (e) {
+    $(document).on('submit', '.updateForm[data-comment-id]', function (e) {
         e.preventDefault();
         const $form = $(this);
         const commentId = $form.data('comment-id');
@@ -171,38 +173,94 @@ $(document).ready(function () {
     $(document).on('click', '.likeButton', function () {
         const postId = $(this).data('post-id');
         const hasLiked = $(this).data('has-liked');
-        if (hasLiked){
-            unlikeUrl = unlikeUrl.replace('0', postId)
+        if (hasLiked) {
+            const unlikeUrlFormatted = unlikeUrl.replace('0', postId);
             $.ajax({
-            type: 'DELETE',
-            url: unlikeUrl,
-            data: { post: postId },
+                type: 'DELETE',
+                url: unlikeUrlFormatted,
+                headers: {
+                    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                success: function (response) {
+                    $(`.likeButton[data-post-id="${postId}"]`).removeClass('liked').data('has-liked', false);
+                },
+                error: function (response) {
+                    alert('An error occurred while unliking the post.');
+                }
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: createLikeUrl,
+                data: { post: postId },
+                headers: {
+                    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                success: function (response) {
+                    $(`.likeButton[data-post-id="${postId}"]`).addClass('liked').data('has-liked', true);
+                },
+                error: function (response) {
+                    alert('An error occurred while liking the post.');
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.postEdit', function () {
+        const postId = $(this).data('post-id');
+        const postElement = $(this).closest('.post-card');
+        const currentText = postElement.find('p').first().text();
+        const updateFormHtml = `
+            <form class="updateForm" data-post-id="${postId}">
+                <div>
+                    <label for="id_text_${postId}">Post:</label>
+                    <input type="text" id="id_text_${postId}" name="text" value="${currentText}">
+                </div>
+                <button type="submit">Update</button>
+                <button type="button" class="cancelEdit">Cancel</button>
+            </form>
+        `;
+        postElement.append(updateFormHtml);
+    });
+
+    $(document).on('submit', '.updateForm[data-post-id]', function (e) {
+        e.preventDefault();
+        const $form = $(this);
+        const postId = $form.data('post-id');
+        const updateUrl = updatePostUrl.replace('0', postId);
+        $.ajax({
+            type: 'PUT',
+            url: updateUrl,
+            data: $form.serialize(),
             headers: {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                    $(`.likeButton[data-post-id="${postId}"]`).removeClass('liked').data('has-liked', false);
+                const postElement = $(`.post-card[data-post-id="${postId}"]`);
+                postElement.find('p').first().text(response.text);
+                $form.remove();
             },
             error: function (response) {
-                alert('An error occurred while liking the post.');
+                alert('An error occurred while updating the post.');
             }
         });
-            
-        }
-        else {$.ajax({
-            type: 'POST',
-            url: createLikeUrl,
-            data: { post: postId },
+    });
+
+    $(document).on('click', '.postDelete', function () {
+        const postId = $(this).data('post-id');
+        const deleteUrl = deletePostUrl.replace('0', postId);
+        $.ajax({
+            type: 'DELETE',
+            url: deleteUrl,
             headers: {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
-            success: function (response) {
-                $(`.likeButton[data-post-id="${postId}"]`).toggleClass('liked').data('has-liked', true);
-            
+            success: function () {
+                $(`.postDelete[data-post-id="${postId}"]`).closest('.post-card').remove();
             },
             error: function (response) {
-                alert('An error occurred while liking the post.');
+                alert('An error occurred while deleting the post.');
             }
-        });}
+        });
     });
 });
