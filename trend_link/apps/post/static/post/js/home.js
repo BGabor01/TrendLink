@@ -5,7 +5,8 @@ $(document).ready(function () {
     const profileUrl = $('#profile-url').data('url');
     let deleteCommentUrl = $('#delete-comment-url-api').data('url');
     let updateCommentUrl = $('#update-comment-url-api').data('url');
-    const createLikeUrl = $('#create-like-url-api').data('url');
+    const createLikeUrl = $('#like-post-url-api').data('url');
+    let unlikeUrl = $('#unlike-post-url-api').data('url');
 
     $.ajax({
         url: postsUrl,
@@ -17,13 +18,19 @@ $(document).ready(function () {
                 const likedClass = post.has_liked ? 'liked' : '';
                 const postCard = `
                     <div class="post-card">
-                        <div class="profile-picture">
-                            <img src="${post.user.profile.profile_picture}" alt="Profile Picture">
-                            <a href="${profileUrl.replace('0', post.user.id)}"><strong>${post.user.username}</strong></a>
+                        <div class="post-header">
+                            <div class="profile-picture">
+                                <img src="${post.user.profile.profile_picture}" alt="Profile Picture">
+                                <a href="${profileUrl.replace('0', post.user.id)}"><strong>${post.user.username}</strong></a>
+                            </div>
+                            <div class="post-buttons">
+                                ${post.user.username === currentUser ? `<button type="button" class="postEdit" data-post-id="${post.id}">Edit</button>` : ''}
+                                ${post.user.username === currentUser ? `<button type="button" class="postDelete" data-post-id="${post.id}">Delete</button>` : ''}
+                            </div>
                         </div>
                         <p>${post.text}</p>
                         ${post.image ? `<div><img src="${post.image}" alt="Post Image"></div>` : ''}
-                        <button type="button" class="likeButton ${likedClass}" data-post-id="${post.id}">Like</button>
+                        <button type="button" class="likeButton ${likedClass}" data-post-id="${post.id}" data-has-liked="${post.has_liked}">Like</button>
                         <div class="comments-section">
                             <p><strong>Comments:</strong></p>
                             <div class="comments">
@@ -163,7 +170,26 @@ $(document).ready(function () {
 
     $(document).on('click', '.likeButton', function () {
         const postId = $(this).data('post-id');
-        $.ajax({
+        const hasLiked = $(this).data('has-liked');
+        if (hasLiked){
+            unlikeUrl = unlikeUrl.replace('0', postId)
+            $.ajax({
+            type: 'DELETE',
+            url: unlikeUrl,
+            data: { post: postId },
+            headers: {
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (response) {
+                    $(`.likeButton[data-post-id="${postId}"]`).removeClass('liked').data('has-liked', false);
+            },
+            error: function (response) {
+                alert('An error occurred while liking the post.');
+            }
+        });
+            
+        }
+        else {$.ajax({
             type: 'POST',
             url: createLikeUrl,
             data: { post: postId },
@@ -171,13 +197,12 @@ $(document).ready(function () {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                if (response.user.username === currentUser) {
-                    $(`.likeButton[data-post-id="${postId}"]`).toggleClass('liked');
-                }
+                $(`.likeButton[data-post-id="${postId}"]`).toggleClass('liked').data('has-liked', true);
+            
             },
             error: function (response) {
                 alert('An error occurred while liking the post.');
             }
-        });
+        });}
     });
 });
