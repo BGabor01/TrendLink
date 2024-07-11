@@ -6,6 +6,8 @@ from apps.post.views import (
     CreateCommentView,
     DeleteCommentView,
     UpdateCommentView,
+    CreateLikeView,
+    UpdatePostView,
 )
 
 urlpatterns = [
@@ -17,6 +19,8 @@ urlpatterns = [
     ),
     path("api/list/", ListPostsView.as_view(), name="list-post-api"),
     path("api/comment/create/", CreateCommentView.as_view(), name="create-comment-api"),
+    path("api/<int:pk>/update/", UpdatePostView.as_view(), name="update-post-api"),
+    path("api/<int:pk>/delete/", UpdatePostView.as_view(), name="delete-post-api"),
     path(
         "api/comment/<int:pk>/delete/",
         DeleteCommentView.as_view(),
@@ -27,4 +31,5 @@ urlpatterns = [
         UpdateCommentView.as_view(),
         name="update-comment-api",
     ),
+    path("api/like/create/", CreateLikeView.as_view(), name="create-like-api"),
 ]
