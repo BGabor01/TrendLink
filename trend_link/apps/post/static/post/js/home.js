@@ -5,6 +5,7 @@ $(document).ready(function () {
     const profileUrl = $('#profile-url').data('url');
     let deleteCommentUrl = $('#delete-comment-url-api').data('url');
     let updateCommentUrl = $('#update-comment-url-api').data('url');
+    const createLikeUrl = $('#create-like-url-api').data('url');
 
     $.ajax({
         url: postsUrl,
@@ -13,6 +14,7 @@ $(document).ready(function () {
             const postsList = $('#post-list');
             postsList.empty();
             response.results.forEach(function (post) {
+                const likedClass = post.has_liked ? 'liked' : '';
                 const postCard = `
                     <div class="post-card">
                         <div class="profile-picture">
@@ -21,6 +23,7 @@ $(document).ready(function () {
                         </div>
                         <p>${post.text}</p>
                         ${post.image ? `<div><img src="${post.image}" alt="Post Image"></div>` : ''}
+                        <button type="button" class="likeButton ${likedClass}" data-post-id="${post.id}">Like</button>
                         <div class="comments-section">
                             <p><strong>Comments:</strong></p>
                             <div class="comments">
@@ -39,7 +42,7 @@ $(document).ready(function () {
                                     </div>`).join('')}
                             </div>
                             <form class="commentForm" method="post" action="${createCommentUrl}">
-                                <input type="hidden" name="post_id" value="${post.id}">
+                                <input type="hidden" name="post" value="${post.id}">
                                 <label for="id_text_${post.id}">Comment:</label>
                                 <input type="text" id="id_text_${post.id}" name="text">
                                 <button type="submit">Add Comment</button>
@@ -157,4 +160,24 @@ $(document).ready(function () {
             }
         });
     }
+
+    $(document).on('click', '.likeButton', function () {
+        const postId = $(this).data('post-id');
+        $.ajax({
+            type: 'POST',
+            url: createLikeUrl,
+            data: { post: postId },
+            headers: {
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (response) {
+                if (response.user.username === currentUser) {
+                    $(`.likeButton[data-post-id="${postId}"]`).toggleClass('liked');
+                }
+            },
+            error: function (response) {
+                alert('An error occurred while liking the post.');
+            }
+        });
+    });
 });
