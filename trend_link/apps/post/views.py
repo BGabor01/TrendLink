@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 from django.db.models import Exists, OuterRef
 
 from apps.post.serializers import (
@@ -8,7 +10,8 @@ from apps.post.serializers import (
     CreateCommentSerializer,
     CommentSerializer,
     UpdateCommentSerializer,
-    CreateLikeSerializer,
+    LikePostSerializer,
+    LikeSerializer,
     PostSerializer,
 )
 from apps.post.models import Post, Comment, Like
@@ -76,9 +79,27 @@ class UpdateCommentView(generics.UpdateAPIView):
     lookup_field = "pk"
 
 
-class CreateLikeView(generics.CreateAPIView):
-    serializer_class = CreateLikeSerializer
+class LikePostView(generics.CreateAPIView):
+    serializer_class = LikePostSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class UnlikePostView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def get_object(self):
+        post_id = self.kwargs["post_id"]
+        user = self.request.user
+        try:
+            like = Like.objects.get(post_id=post_id, user=user)
+            return like
+        except Like.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, *args, **kwargs):
+        like = self.get_object()
+        like.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
