@@ -28,11 +28,13 @@
             </div>
         </div>
     </div>
+    <div id="current-user" data-user="{{ user }}" style="display:none;"></div>
     <div id="posts-url" data-url="{% url 'list-post-api' %}" style="display:none;"></div>
     <div id="create-comment-url-api" data-url="{% url 'create-comment-api' %}" style="display:none;"></div>
     <div id="delete-comment-url-api" data-url="{% url 'delete-comment-api' 0 %}" style="display:none;"></div>
     <div id="update-comment-url-api" data-url="{% url 'update-comment-api' 0 %}" style="display:none;"></div>
     <div id="profile-url" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
-    <div id="current-user" data-user="{{ user }}" style="display:none;"></div>
+    <div id="create-like-url-api" data-url="{% url 'create-like-api' %}" style="display:none;"></div>
+    
 </body>
 </html>
