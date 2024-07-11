@@ -250,3 +250,8 @@ body {
 .post-card .profile-picture a:hover {
     text-decoration: none;
 }
+
+.liked {
+    background-color: #28a745;
+    color: white;
+}
