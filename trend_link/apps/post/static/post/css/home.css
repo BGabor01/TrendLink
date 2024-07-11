@@ -58,7 +58,6 @@ body {
     background-color: #0056b3;
 }
 
-
 .content {
     width: 75%;
 }
@@ -162,7 +161,6 @@ body {
     border-radius: 5px;
 }
 
-
 .comment {
     position: relative;
     display: flex;
@@ -227,12 +225,30 @@ body {
     margin-top: 10px;
 }
 
-.post-card .profile-picture {
+.post-card {
+    width: 70%;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-picture {
     display: flex;
     align-items: center;
 }
 
-.post-card .profile-picture img {
+.profile-picture img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -240,15 +256,34 @@ body {
     vertical-align: middle;
 }
 
-.post-card .profile-picture a {
+.profile-picture a {
     text-decoration: none;
     color: inherit;
     font-size: 18px;
     vertical-align: middle;
 }
 
-.post-card .profile-picture a:hover {
+.profile-picture a:hover {
     text-decoration: none;
+}
+
+.post-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.post-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.post-buttons button:hover {
+    background-color: #0056b3;
 }
 
 .liked {
