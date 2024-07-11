@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Exists, OuterRef
 
 from apps.post.serializers import (
     EditCreatePostSerializer,
@@ -7,8 +8,10 @@ from apps.post.serializers import (
     CreateCommentSerializer,
     CommentSerializer,
     UpdateCommentSerializer,
+    CreateLikeSerializer,
+    PostSerializer,
 )
-from apps.post.models import Post, Comment
+from apps.post.models import Post, Comment, Like
 from apps.post.permissions import IsOwnerOrPostOwnerOrReadOnly
 from apps.user.permissions import IsOwnerOrReadOnly
 
@@ -23,7 +26,32 @@ class CreatePostView(generics.CreateAPIView):
 
 class ListPostsView(generics.ListAPIView):
     serializer_class = ListPostsSerializer
-    queryset = Post.objects.all().prefetch_related("comments")
+
+    def get_queryset(self):
+        return (
+            Post.objects.all()
+            .prefetch_related("comments")
+            .select_related("user")
+            .annotate(
+                has_liked=Exists(
+                    Like.objects.filter(user=self.request.user, post=OuterRef("pk"))
+                )
+            )
+        )
+
+
+class UpdatePostView(generics.UpdateAPIView):
+    serializer_class = EditCreatePostSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    queryset = Post.objects.all()
+    lookup_field = "pk"
+
+
+class DeletePostView(generics.DestroyAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    queryset = Post.objects.all()
+    lookup_field = "pk"
 
 
 class CreateCommentView(generics.CreateAPIView):
@@ -46,3 +74,11 @@ class UpdateCommentView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = Comment.objects.all()
     lookup_field = "pk"
+
+
+class CreateLikeView(generics.CreateAPIView):
+    serializer_class = CreateLikeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
