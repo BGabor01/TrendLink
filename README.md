@@ -8,6 +8,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 - [Requirements](#requirements)
 - [Preparation](#preparation)
 - [Docker configuration](#docker-configuration)
+- [Database Schema](#database-schema)
 
 
 ## Features
@@ -93,3 +94,6 @@ POSTGRES_PASSWORD=your_db_password
 - Nginx is used as a reverse proxy to serve the Django application.
 - The configuration file is located at ```trend_link/nginx.conf```.
 - The Docker Compose setup maps this configuration file to the Nginx container.
+
+## Database Schema
+<img src="./readme_media/db_schema.jpg">
