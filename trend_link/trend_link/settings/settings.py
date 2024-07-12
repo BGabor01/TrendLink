@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # internall apps
     "apps.user",
     "apps.post",
+    "apps.connection"
 ]
 
 MIDDLEWARE = [
