@@ -2,7 +2,9 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from django.db.models import Exists, OuterRef
+from django.db import IntegrityError
 
 from apps.post.serializers import (
     EditCreatePostSerializer,
@@ -83,7 +85,10 @@ class LikePostView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        try:
+            return serializer.save(user=self.request.user)
+        except IntegrityError:
+            raise ValidationError({"detail": "User already liked this post"}, 400)
 
 
 class UnlikePostView(generics.DestroyAPIView):
