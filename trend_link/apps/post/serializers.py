@@ -65,14 +65,6 @@ class UpdateCommentSerializer(serializers.ModelSerializer):
         fields = ["text"]
 
 
-class LikeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Like
-        fields = "__all__"
-
-
 class LikePostSerializer(serializers.ModelSerializer):
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
 
