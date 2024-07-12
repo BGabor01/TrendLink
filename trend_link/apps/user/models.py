@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from apps.user.managers import UserManager
 
 
 class UserProfile(models.Model):
@@ -16,3 +17,6 @@ class UserProfile(models.Model):
 
     class Meta:
         app_label = "user"
+
+
+User.add_to_class("objects", UserManager())
