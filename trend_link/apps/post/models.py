@@ -46,6 +46,9 @@ class Comment(models.Model):
 
     class Meta:
         app_label = "post"
+        indexes = [
+            models.Index(fields=["user", "post"]),
+        ]
 
 
 class Like(models.Model):
@@ -63,3 +66,6 @@ class Like(models.Model):
     class Meta:
         app_label = "post"
         unique_together = ("user", "post")
+        indexes = [
+            models.Index(fields=["user", "post"]),
+        ]
