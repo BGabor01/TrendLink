@@ -21,6 +21,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 ## Applications
 - **User**
 - **Post**
+- **Connection**
 
 ## Tech Stack
 
