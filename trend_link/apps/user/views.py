@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import login, authenticate, logout
+from django.db.models import Case, When, Q, Value, BooleanField
 
 from apps.user.serializers import (
     SignUpSerializer,
@@ -12,6 +13,7 @@ from apps.user.serializers import (
 )
 from apps.user.permissions import IsOwnerOrReadOnly
 from apps.user.models import User, UserProfile
+from apps.connection.models import ConnectionRequest
 
 
 class SignUpView(generics.CreateAPIView):
@@ -56,11 +58,14 @@ class UpdateProfileView(generics.UpdateAPIView):
 
 
 class RetrieveProfileView(generics.RetrieveAPIView):
-    
+
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-    queryset = User.objects.all().select_related("profile")
     lookup_field = "pk"
+
+    def get_queryset(self, **kwargs):
+        profile_user_id = self.kwargs["pk"]
+        return User.objects.with_connection_info(self.request.user, profile_user_id)
 
 
 class ListMembersView(generics.ListAPIView):
@@ -71,6 +76,4 @@ class ListMembersView(generics.ListAPIView):
     def get_queryset(self):
         from apps.user.models import User
 
-        return User.objects.exclude(id = self.request.user.id).select_related(
-            "profile"
-        )
+        return User.objects.exclude(id=self.request.user.id).select_related("profile")
