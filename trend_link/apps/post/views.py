@@ -11,7 +11,6 @@ from apps.post.serializers import (
     CommentSerializer,
     UpdateCommentSerializer,
     LikePostSerializer,
-    LikeSerializer,
     PostSerializer,
 )
 from apps.post.models import Post, Comment, Like
