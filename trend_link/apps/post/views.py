@@ -34,7 +34,7 @@ class ListPostsView(generics.ListAPIView):
     def get_queryset(self):
         return (
             Post.objects.all()
-            .prefetch_related("comments", "comments__user")
+            .prefetch_related("comments", "comments__user", "comments__user__profile")
             .select_related("user", "user__profile")
             .annotate(
                 has_liked=Exists(
