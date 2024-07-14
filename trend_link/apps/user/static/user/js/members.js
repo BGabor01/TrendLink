@@ -8,7 +8,7 @@ $(document).ready(function () {
                 profilesList.empty();
 
                 response.results.forEach(function (profile) {
-                    profileDetailsUrl = profileDetailsUrl.replace('0', profile.id)
+                    let currentProfileDetailsUrl = profileDetailsUrl.replace('0', profile.id);
                     const profileCard = `
                         <div class="profile-card">
                             <div class="profile-picture">
@@ -17,7 +17,7 @@ $(document).ready(function () {
                             <div class="profile-details">
                                 <p><strong>Username:</strong> ${profile.username}</p>
                                 <p><strong>Email:</strong> ${profile.email}</p>
-                                <a href="${profileDetailsUrl}">View Profile</a>
+                                <a href="${currentProfileDetailsUrl}">View Profile</a>
                             </div>
                         </div>`;
 
@@ -35,6 +35,7 @@ $(document).ready(function () {
             }
         });
     }
+
     let profileDetailsUrl = $('#profile-details').data('url');
     const membersUrlApi = $('#members-url-api').data('url');
     const membersUrl = $('#members-url').data('url');
