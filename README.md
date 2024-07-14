@@ -17,6 +17,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 - Profile Management
 - Post Creation and Management
 - Comment Creation and Management
+- Connections Creation and Management
 
 ## Applications
 - **User**
