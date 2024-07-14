@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
-class Connection(models.Model):
+class UserConnection(models.Model):
     initiator = models.ForeignKey(
         User,
         related_name="initiated",
@@ -49,9 +50,13 @@ class ConnectionRequest(models.Model):
 
     class Meta:
         app_label = "connection"
-        unique_together = ("sender", "recipient")
         indexes = [
             models.Index(fields=["sender", "recipient"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["sender", "recipient"], name="unique_sender_recipient_pair"
+            ),
         ]
 
     def __str__(self):
@@ -70,7 +75,7 @@ User.add_to_class(
     "connections",
     models.ManyToManyField(
         "self",
-        through=Connection,
+        through=UserConnection,
         symmetrical=True,
     ),
 )
