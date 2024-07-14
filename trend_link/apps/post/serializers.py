@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.post.models import Post, Comment, Like
 from apps.user.serializers import UserSerializer
+from apps.post.paginations import CommentPagination
 
 
 class EditCreatePostSerializer(serializers.ModelSerializer):
@@ -32,9 +33,21 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PaginatedCommentsField(serializers.Field):
+    def get_attribute(self, instance):
+        return instance.comments.all()
+
+    def to_representation(self, value):
+        request = self.context.get("request")
+        paginator = CommentPagination()
+        page = paginator.paginate_queryset(value, request)
+        serializer = CommentSerializer(page, many=True, context={"request": request})
+        return paginator.get_paginated_response(serializer.data)
+
+
 class ListPostsSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = PaginatedCommentsField()
     has_liked = serializers.SerializerMethodField()
 
     class Meta:
