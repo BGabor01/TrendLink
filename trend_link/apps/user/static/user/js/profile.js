@@ -11,6 +11,7 @@ $(document).ready(function () {
     const retrieveUrl = $('#retrieve-url').data('url').replace('0', userId);
     const updateUrl = $('#update-url').data('url').replace('0', userId);
     const loginUrl = $('#login-url').data('url');
+    const connectUrl = $('#connect-url').data('url');
 
     $.ajax({
         url: retrieveUrlApi,
@@ -27,6 +28,8 @@ $(document).ready(function () {
             if (currentUserId == userId) {
                 $('#edit-button').show();
                 $('#uploadForm').show();
+            } else {
+                $('#connect-button').show();
             }
         },
         error: function (response) {
@@ -75,6 +78,25 @@ $(document).ready(function () {
             },
             error: function (response) {
                 alert('An error occurred while updating the profile.');
+            }
+        });
+    });
+
+    $('#connect-button').click(function() {
+        $.ajax({
+            url: connectUrl,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            data: {
+                recipient: userId,
+            },
+            success: function(response) {
+                alert('Connection request sent successfully!');
+            },
+            error: function(error) {
+                alert('Error sending connection request.');
             }
         });
     });
