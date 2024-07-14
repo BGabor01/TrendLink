@@ -36,7 +36,7 @@ $(document).ready(function () {
                         <div class="comments-section">
                             <p><strong>Comments:</strong></p>
                             <div class="comments">
-                                ${post.comments.map(comment => `
+                                ${post.comments.results.map(comment => `
                                     <div class="comment" data-comment-id="${comment.id}">
                                         <div class="comment-header">
                                             <img src="${comment.user.profile.profile_picture}" alt="Profile Picture">
