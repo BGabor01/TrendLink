@@ -49,7 +49,6 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -61,6 +60,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(read_only=True)
+    connected = serializers.BooleanField(read_only=True)
+    pending = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "profile"]
+        fields = ["id", "username", "email", "profile", "connected", "pending"]
