@@ -97,7 +97,9 @@ class LikePostView(generics.CreateAPIView):
         try:
             return serializer.save(user=self.request.user)
         except IntegrityError:
-            raise ValidationError({"detail": "User already liked this post"}, 400)
+            raise ValidationError(
+                {"detail": "User already liked this post"}, status.HTTP_400_BAD_REQUEST
+            )
 
 
 class UnlikePostView(generics.DestroyAPIView):
