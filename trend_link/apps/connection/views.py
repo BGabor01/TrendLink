@@ -33,7 +33,9 @@ class ListConnectionRequests(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
+        return ConnectionRequest.objects.filter(
+            recipient=self.request.user, status=0
+        ).select_related("sender")
 
 
 class AcceptConnectionRequestView(generics.UpdateAPIView):
