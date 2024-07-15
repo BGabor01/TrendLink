@@ -41,6 +41,7 @@ class ListPostsView(generics.ListAPIView):
                     Like.objects.filter(user=self.request.user, post=OuterRef("pk"))
                 )
             )
+            .order_by("-created_at")
         )
 
     def get_serializer_context(self):

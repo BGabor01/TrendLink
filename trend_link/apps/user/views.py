@@ -76,4 +76,8 @@ class ListMembersView(generics.ListAPIView):
     def get_queryset(self):
         from apps.user.models import User
 
-        return User.objects.exclude(id=self.request.user.id).select_related("profile")
+        return (
+            User.objects.exclude(id=self.request.user.id)
+            .select_related("profile")
+            .order_by("-date_joined")
+        )
