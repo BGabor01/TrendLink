@@ -1,30 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 
 class UserConnection(models.Model):
-    initiator = models.ForeignKey(
+    user = models.OneToOneField(
         User,
-        related_name="initiated",
         on_delete=models.CASCADE,
+        related_name="connections",
+        related_query_name="connections",
     )
-    receiver = models.ForeignKey(
-        User,
-        related_name="receiver",
-        on_delete=models.CASCADE,
-    )
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    connections = models.ManyToManyField(User, blank=True, symmetrical=True)
 
-    class Meta:
-        app_label = "connection"
-        unique_together = ("initiator", "receiver")
-        indexes = [
-            models.Index(fields=["initiator", "receiver"]),
-        ]
-
-    def __str__(self):
-        return f"Connection({self.initiator} and {self.receiver})"
+    def __str__(self) -> str:
+        return f"{self.user.username}'s connection list"
 
 
 class ConnectionRequest(models.Model):
@@ -69,13 +59,3 @@ class ConnectionRequest(models.Model):
     def reject(self):
         self.status = 2
         self.save()
-
-
-User.add_to_class(
-    "connections",
-    models.ManyToManyField(
-        "self",
-        through=UserConnection,
-        symmetrical=True,
-    ),
-)
