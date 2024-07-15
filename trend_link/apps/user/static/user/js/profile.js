@@ -28,9 +28,13 @@ $(document).ready(function () {
             if (currentUserId == userId) {
                 $('#edit-button').show();
                 $('#uploadForm').show();
-            } else {
+            }
+
+            if (!response.connected && !response.pending){
                 $('#connect-button').show();
             }
+            
+            
         },
         error: function (response) {
             if (response.status === 403) {
