@@ -6,8 +6,9 @@ A social media platform, that uses recommendation algorithms for personalized co
 - [Tech Stack](#tech-stack)
 - [Applications](#applications)
 - [Requirements](#requirements)
-- [Preparation](#preparation)
+- [Installation](#installation)
 - [Docker configuration](#docker-configuration)
+- [AWS S3 Configuration](#aws-s3-configuration)
 - [Database Schema](#database-schema)
 
 
@@ -33,18 +34,21 @@ A social media platform, that uses recommendation algorithms for personalized co
 - **Authentication**: SessionAuth
 - **Containerization**: Docker
 - **Proxy Server**: Nginx
+- **Storage**: AWS S3*
 
 ### Frontend
 - **HTML/CSS**
 - **JavaScript**
 - **JQuery**
 
+*production only
+
 ## Requirements
 
 - Docker
 - Docker Compose
 
-## Preparation
+## Installation
 
 1. **Clone the Repository:**
 
@@ -54,12 +58,21 @@ A social media platform, that uses recommendation algorithms for personalized co
 
 2. **Create an .env File:**
 
-    Create an .env file in the project root with the following content (adjust values as necessary):
+    Create an .env file in the project root with the following content:
     ```bash
-    POSTGRES_DB=your_db_name
-    POSTGRES_USER=your_db_user
-    POSTGRES_PASSWORD=your_db_password
-    DJANGO_SECRET_KEY=your_secret_key
+    # Django Settings
+    DJANGO_SECRET_KEY=your_secret_key 
+
+    # PostgreSQL Database Settings
+    POSTGRES_DB=your_db_name          
+    POSTGRES_USER=your_db_user       
+    POSTGRES_PASSWORD=your_db_password  
+
+    # AWS S3 Settings (Production only)
+    AWS_ACCESS_KEY_ID=your_access_key_id            
+    AWS_SECRET_ACCESS_KEY=your_secret_access_key    
+    AWS_STORAGE_BUCKET_NAME=your_bucket_name        
+    AWS_S3_REGION_NAME=region_of_your_bucket
     ```
 
 3. **Build the docker containers**
@@ -72,30 +85,66 @@ A social media platform, that uses recommendation algorithms for personalized co
     docker-compose up
     ```
 
-5. **Create a super user for Django**
-- Enter the container with this command:
-    ```bash
-    docker exec -it trendlink-django-1 bash
-    ```
-- Inside the container:
-    ```bash
-    python manage.py createsuperuser
-    ```
-
 ## Docker Configuration
-**Database (PostgreSQL)**
-- The docker-compose.yml file sets up a PostgreSQL database container. Make sure the .env file contains the correct database configuration:
+The DockerFile uses the `python:3.11-slim` base image. <br>
+The services are defined in the `docker-compose.yml`.
 
-```bash
-POSTGRES_DB=your_db_name
-POSTGRES_USER=your_db_user
-POSTGRES_PASSWORD=your_db_password
-```
+**Django**
+- Service name: `django`
+
+**Database (PostgreSQL)**
+- Service name: `postgres`
 
 **Nginx**
-- Nginx is used as a reverse proxy to serve the Django application.
-- The configuration file is located at ```trend_link/nginx.conf```.
-- The Docker Compose setup maps this configuration file to the Nginx container.
+- Service name: `nginx`
+- The configuration file is located at `trend_link/nginx.conf`.
+
+## AWS S3 Configuration
+AWS S3 is used for storing static and media files in production. <br>
+Follow these steps to configure AWS S3.
+
+1. **Create an S3 Bucket**:
+    - Go to the AWS S3 console and create a new bucket.
+    - Disable the block public access settings to allow public access to the bucket.
+
+2. **Configure Bucket Policies**
+    - Set the appropriate bucket policy to allow public read access.
+
+    Example
+
+    ```bash
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::your_bucket_name/*"
+                }
+            ]
+        }
+    ```
+
+    - Configure CORS policy for the bucket
+
+    Example
+
+    ```bash
+    [
+        {
+            "AllowedHeaders": ["*"],
+            "AllowedMethods": ["GET"],
+            "AllowedOrigins": ["*"],
+            "ExposeHeaders": []
+        }
+    ]
+    ```
+
+3. **Set Up IAM Permissions**
+    - Create an `IAM` user with `AmazonS3FullAccess` permissions.
+    - Generate access keys for the IAM user.
 
 ## Database Schema
 <img src="./readme_media/db_schema.jpg">
