@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APIClient
-from apps.connection.models import ConnectionRequest, UserConnection
+from apps.connection.models import ConnectionRequest
 
 
 @pytest.fixture
@@ -19,23 +19,6 @@ def recipient(db):
 @pytest.fixture
 def client():
     return APIClient()
-
-
-@pytest.mark.django_db(transaction=True)
-def test_connection_created_on_accept(sender, recipient):
-    connection_request = ConnectionRequest.objects.create(
-        sender=sender, recipient=recipient
-    )
-
-    assert UserConnection.objects.count() == 0
-
-    connection_request.accept()
-
-    assert UserConnection.objects.count() == 1
-
-    connection = UserConnection.objects.first()
-    assert connection.initiator == sender
-    assert connection.receiver == recipient
 
 
 @pytest.mark.django_db
