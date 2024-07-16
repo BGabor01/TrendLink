@@ -1,17 +1,13 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post</title>
-    <link rel="stylesheet" href="{% static 'post/css/create-post.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'post/js/post.js' %}"></script>
-</head>
-<body>
-    <div class="form-container">
-        <h1>Post</h1>
+{% block title %}Create Post{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'post/css/post.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'post/js/create-post.js' %}"></script>
+{% endblock %}
+{% block content %}
+<div class="form-container">
         <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'create-post-api' %}">
             {% csrf_token %}
            <div>
@@ -24,6 +20,5 @@
             </div>
             <input type="submit" value="Post">
         </form>
-    </div>
-</body>
-</html>
+</div>
+{% endblock %}
