@@ -5,13 +5,13 @@ $(document).ready(function () {
     }
 
     const userId = getUserIdFromPath();
-    const currentUserId = $('#current-user-id').data('id');
-
-    const retrieveUrlApi = $('#retrieve-url-api').data('url').replace('0', userId);
-    const retrieveUrl = $('#retrieve-url').data('url').replace('0', userId);
-    const updateUrl = $('#update-url').data('url').replace('0', userId);
-    const loginUrl = $('#login-url').data('url');
-    const connectUrl = $('#connect-url').data('url');
+    const script = document.querySelector('script[src*="profile.js"]');
+    const currentUserId = script.dataset.currentUserId
+    const retrieveUrlApi = script.dataset.retrieveProfileApiUrl.replace('0', userId);
+    const retrieveUrl = script.dataset.retrieveProfileUrl.replace('0', userId);
+    const updateUrl = script.dataset.updateProfileUrl.replace('0', userId);
+    const loginUrl = script.dataset.loginUrl
+    const connectUrl = script.dataset.connectUrl
 
     $.ajax({
         url: retrieveUrlApi,
@@ -30,7 +30,7 @@ $(document).ready(function () {
                 $('#uploadForm').show();
             }
 
-            if (!response.connected && !response.pending){
+            if (!response.connected && !response.pending && userId !== currentUserId){
                 $('#connect-button').show();
             }
             
