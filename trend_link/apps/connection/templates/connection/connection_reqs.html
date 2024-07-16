@@ -2,15 +2,15 @@
 {% load static %}
 {% block title %}Connection Requests{% endblock %}
 {% block extra_head %}
-    <link rel="stylesheet" href="{% static 'connection/css/connection_reqs.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'connection/js/connection_reqs.js' %}"
-    defer
-    data-get-connection-reqs-url="{% url 'list-connectionreq-api' %}" 
-    data-accept-request-url="{% url 'accept-connectionreq-api' 0 %}"
-    data-reject-request-url="{% url 'reject-connectionreq-api' 0 %}"
-    data-profile-url="{% url 'profile' 0 %}"
-    ></script>
+<link rel="stylesheet" href="{% static 'connection/css/connection_reqs.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'connection/js/connection_reqs.js' %}"
+defer
+data-get-connection-reqs-url="{% url 'list-connectionreq-api' %}" 
+data-accept-connection-url="{% url 'accept-connectionreq-api' 0 %}"
+data-reject-connection-url="{% url 'reject-connectionreq-api' 0 %}"
+data-profile-url="{% url 'profile' 0 %}"
+></script>
 {% endblock %}
 {% block content %}
     {% csrf_token %}
