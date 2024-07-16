@@ -1,9 +1,11 @@
 $(document).ready(function() {
     const script = document.querySelector('script[src*="connection_reqs.js"]');
     const connectionReqsUrl = script.dataset.getConnectionReqsUrl
-    let profileDetailsUrl = script.dataset.profileUrl
-    let acceptConnectionReqUrl = script.acceptRequestUrl
-    let rejectConnectionReqUrl = script.rejetRequestUrl
+    const profileDetailsUrl = script.dataset.profileUrl
+    const acceptConnectionReqUrl = script.dataset.acceptConnectionUrl
+    const rejectConnectionReqUrl = script.dataset.rejectConnectionUrl
+
+    console.log(acceptConnectionReqUrl)
     
     $.ajax({
         url: connectionReqsUrl,
