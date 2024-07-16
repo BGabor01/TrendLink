@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "storages",
     "channels",
+    "health_check",
+    "health_check.db",
     # internall apps
     "apps.user",
     "apps.post",
