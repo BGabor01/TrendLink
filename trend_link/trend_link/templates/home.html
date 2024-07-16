@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'post/js/fetch-posts.js' %}"
+defer
+data-current-user="{{ user }}"
+data-profile-url="{% url 'profile' 0 %}"
+data-get-posts-url="{% url 'list-post-api' %}"
+data-delete-post-url="{% url 'delete-post-api' 0 %}"
+data-update-post-url="{% url 'update-post-api' 0 %}"
+></script>
+<script src="{% static 'post/js/comments.js' %}"
+defer
+data-profile-url="{% url 'profile' 0 %}"
+data-delete-comment-url="{% url 'delete-comment-api' 0 %}"
+data-update-comment-url="{% url 'update-comment-api' 0 %}"
+data-create-comment-url="{% url 'create-comment-api' %}"
+>
+</script>
+<script src="{% static 'post/js/like.js' %}"
+defer
+data-like-post-url="{% url 'like-post-api' %}"
+data-unlike-post-url="{% url 'unlike-post-api' 0 %}"
+>
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="content">
+        <div class="post-list" id="post-list">
+        </div>
+    </div>
+</div>
+{% endblock %}
