@@ -6,6 +6,7 @@ services:
     command: python -m uvicorn trend_link.asgi:application --host 0.0.0.0 --port 8000
     depends_on:
       - postgres
+      - redis
     env_file:
       - .env
     volumes:
@@ -30,5 +31,11 @@ services:
     depends_on:
       - django
 
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/var/lib/redis/data
+
 volumes:
   postgres_data:
+  redis_data:
