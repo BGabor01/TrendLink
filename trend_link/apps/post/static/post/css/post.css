@@ -3,7 +3,7 @@ body {
     background-color: #f0f2f5;
     margin: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     height: 100vh;
 }
@@ -46,14 +46,14 @@ body {
 }
 
 .form-container input[type="submit"] {
-    background-color: #007bff;
+    background-color: purple;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .form-container input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: rgb(84, 2, 84);
 }
 
 .form-container .file-label {
