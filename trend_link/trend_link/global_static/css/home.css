@@ -171,7 +171,7 @@ body {
 }
 
 .comment-buttons button {
-    background-color: #007bff;
+    background-color: purple;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -181,7 +181,7 @@ body {
 }
 
 .comment-buttons button:hover {
-    background-color: #0056b3;
+    background-color: rgb(84, 2, 84);
 }
 
 .comment p {
@@ -241,7 +241,7 @@ body {
 }
 
 .post-buttons button {
-    background-color: #007bff;
+    background-color: purple;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -250,11 +250,45 @@ body {
     transition: background-color 0.3s;
 }
 
+.post-card .likeButton {
+    color: black;
+    border: 1px;
+    border-color: purple;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.post-card .likeButton:hover{
+    background-color: rgb(84, 2, 84);
+    color: #fff;
+    transition: background-color 0.3s;
+    transition: color 0.3s;
+}
+
+.commentForm button{
+    color: black;
+    border: 1px;
+    border-color: purple;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.commentForm button:hover{
+    background-color: rgb(84, 2, 84);
+    color: #fff;
+    transition: background-color 0.3s;
+    transition: color 0.3s;
+
+}
+
+
 .post-buttons button:hover {
-    background-color: #0056b3;
+    background-color: rgb(84, 2, 84)
 }
 
 .liked {
-    background-color: #28a745;
+    background-color: purple;
     color: white;
 }
