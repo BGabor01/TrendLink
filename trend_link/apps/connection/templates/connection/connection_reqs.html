@@ -1,23 +1,21 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Connection Requests</title>
+{% block title %}Connection Requests{% endblock %}
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'connection/css/connection_reqs.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'connection/js/connection_reqs.js' %}"></script>
-</head>
-<body>
-    <div class="connectionreq-container">
-        <h1>Connection Requests</h1>
-        <div class="connectionreq-list" id="connectionreq-list">
-        </div>
-    </div>
-    <div id="connectionreq-url-api" data-url="{% url 'list-connectionreq-api' %}" style="display:none;"></div>
+    <script src="{% static 'connection/js/connection_reqs.js' %}"
+    defer
+    data-get-connection-reqs-url="{% url 'list-connectionreq-api' %}" 
+    data-accept-request-url="{% url 'accept-connectionreq-api' 0 %}"
+    data-reject-request-url="{% url 'reject-connectionreq-api' 0 %}"
+    data-profile-url="{% url 'profile' 0 %}"
+    ></script>
+{% endblock %}
+{% block content %}
     {% csrf_token %}
-    <div id="profile-details" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
-    <div id="accept-connectionreq-url-api" data-url="{% url 'accept-connectionreq-api' 0 %}" style="display:none;"></div>
-    <div id="reject-connectionreq-url-api" data-url="{% url 'reject-connectionreq-api' 0 %}" style="display:none;"></div>
-</body>
-</html>
+    <div class="connectionreq-container">
+        <div class="connectionreq-list" id="connectionreq-list">
+    </div>
+    </div>
+{% endblock %}
