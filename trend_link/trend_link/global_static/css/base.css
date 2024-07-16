@@ -8,3 +8,9 @@ body {
     align-items: center;
     min-height: 100vh;
 }
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
