@@ -1,8 +1,9 @@
 $(document).ready(function() {
-    const connectionReqsUrl = $('#connectionreq-url-api').data('url');
-    let profileDetailsUrl = $('#profile-details').data('url');
-    let acceptConnectionReqUrl = $('#accept-connectionreq-url-api').data('url');
-    let rejectConnectionReqUrl = $('#reject-connectionreq-url-api').data('url');
+    const script = document.querySelector('script[src*="connection_reqs.js"]');
+    const connectionReqsUrl = script.dataset.getConnectionReqsUrl
+    let profileDetailsUrl = script.dataset.profileUrl
+    let acceptConnectionReqUrl = script.acceptRequestUrl
+    let rejectConnectionReqUrl = script.rejetRequestUrl
     
     $.ajax({
         url: connectionReqsUrl,
@@ -16,12 +17,13 @@ $(document).ready(function() {
                 const profileCard = `
                     <div class="profile-card" data-connectionreq-id="${connectionReqs.id}">
                         <div class="profile-picture">
-                            <img src="${connectionReqs.sender.profile.profile_picture}" alt="${connectionReqs.sender.profile.username}'s profile picture">
+                            <a href="${currentProfileDetailsUrl}">
+                                <img src="${connectionReqs.sender.profile.profile_picture}" alt="${connectionReqs.sender.profile.username}'s profile picture">
+                            </a>
                         </div>
                         <div class="profile-details">
                             <p><strong>Username:</strong> ${connectionReqs.sender.username}</p>
                             <p><strong>Email:</strong> ${connectionReqs.sender.email}</p>
-                            <a href="${currentProfileDetailsUrl}">View Profile</a>
                             <button type="button" class="accept-button" data-connectionreq-id="${connectionReqs.id}">Accept</button> 
                             <button class="reject-button" data-connectionreq-id="${connectionReqs.id}">Reject</button>
                         </div>
