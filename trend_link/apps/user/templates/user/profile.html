@@ -1,15 +1,21 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{% static 'user/css/profile.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'user/js/profile.js' %}"></script>
-</head>
-<body>
-    <a href="{% url 'home' %}" class="home-link">Home</a>
+{% block title %}Profile{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'user/css/profile.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'user/js/profile.js' %}"
+defer
+data-current-user-id="{{ user.id }}"
+data-connect-url="{% url 'send-connectionreq-api' %}"
+data-retrieve-profile-url="{% url 'profile' 0 %}"
+data-retrieve-profile-api-url="{% url 'profile-retrieve-api' 0 %}"
+data-update-profile-url="{% url 'profile-update-api' 0 %}"
+data-login-url="{% url 'login' %}"
+></script>
+{% endblock %}
+{% block content %}
+    <div class="main-content">
     <div class="profile-container">
         <h1 id="username"></h1>
         <div class="profile-picture">
@@ -41,11 +47,5 @@
             <button type="submit">Update</button>
         </form>
     </div>
-    <div id="current-user-id" data-id="{{ user.id }}" style="display:none;"></div>
-    <div id="connect-url" data-url="{% url 'send-connectionreq-api' %}" style="display:none;"></div>
-    <div id="retrieve-url-api" data-url="{% url 'profile-retrieve-api' 0 %}" style="display:none;"></div>
-    <div id="retrieve-url" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
-    <div id="update-url" data-url="{% url 'profile-update-api' 0 %}" style="display:none;"></div>
-    <div id="login-url" data-url="{% url 'login' %}" style="display:none;"></div>
-</body>
-</html>
+    </div>
+{% endblock %}
