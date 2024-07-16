@@ -19,6 +19,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 - Post Creation and Management
 - Comment Creation and Management
 - Connections Creation and Management
+- Real-time notifications
 
 ## Applications
 - **User**
@@ -31,6 +32,7 @@ A social media platform, that uses recommendation algorithms for personalized co
 - **Framework**: Django
 - **API**: Django Rest Framework (DRF)
 - **Database**: PostgreSQL
+- **Channels backend**: Redis
 - **Authentication**: SessionAuth
 - **Containerization**: Docker
 - **Proxy Server**: Nginx
@@ -94,6 +96,9 @@ The services are defined in the `docker-compose.yml`.
 
 **Database (PostgreSQL)**
 - Service name: `postgres`
+
+**Channels backend (Redis)**
+- Service name: `redis`
 
 **Nginx**
 - Service name: `nginx`
