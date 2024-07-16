@@ -1,22 +1,21 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Profiles</title>
-    <link rel="stylesheet" href="{% static 'user/css/members.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'user/js/members.js' %}"></script>
-</head>
-<body>
-    <div class="profiles-container">
-        <h1>User Profiles</h1>
+{% block title %}Members{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'user/css/members.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'user/js/members.js' %}"
+defer
+data-get-members-url="{% url 'members-api' %}"
+data-profile-details-url="{% url 'profile' 0 %}"
+data-login-url="{% url 'login' %}"
+></script>
+
+{% endblock %}
+{% block content %}
+<div class="profiles-container">
         <div class="profiles-list" id="profiles-list">
         </div>
-    </div>
-    <div id="members-url-api" data-url="{% url 'members-api' %}" style="display:none;"></div>
-    <div id="members-url" data-url="{% url 'members' %}" style="display:none;"></div>
-    <div id="profile-details" data-url="{% url 'profile' 0 %}" style="display:none;"></div>
-    <div id="login-url" data-url="{% url 'login' %}" style="display:none;"></div>
-</body>
-</html>
+</div>
+{% endblock %}
+
