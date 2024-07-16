@@ -1,15 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.profiles-container {
+.connectionreq-container {
     width: 80%;
     max-width: 1200px;
     background-color: #fff;
@@ -17,17 +6,13 @@ body {
     border-radius: 10px;
     padding: 20px;
     text-align: center;
+    margin: auto;
 }
 
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.profiles-list {
+.connectionreq-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .profile-card {
@@ -62,21 +47,37 @@ h1 {
     margin: 5px 0;
 }
 
-.profile-card .profile-details a, button{
+.profile-card .profile-details a {
     display: inline-block;
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: purple;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     font-size: 14px;
     transition: background-color 0.3s;
-    border: none
 }
 
-.profile-card .profile-details a:hover, button:hover {
-    background-color: #0056b3;
+.profile-card .profile-details a:hover {
+    background-color: rgb(84, 2, 84);
+}
+
+.profile-card button{
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: purple;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+
+}
+
+.profile-card button:hover{
+    background-color: rgb(84, 2, 84);
 }
 
 .pagination {
