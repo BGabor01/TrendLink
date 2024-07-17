@@ -18,6 +18,7 @@ from apps.post.serializers import (
 from apps.post.models import Post, Comment, Like
 from apps.post.permissions import IsOwnerOrPostOwnerOrReadOnly
 from apps.user.permissions import IsOwnerOrReadOnly
+from apps.post.paginations import PostCursorPagination
 
 
 class CreatePostView(generics.CreateAPIView):
@@ -30,6 +31,7 @@ class CreatePostView(generics.CreateAPIView):
 
 class ListPostsView(generics.ListAPIView):
     serializer_class = ListPostsSerializer
+    pagination_class = PostCursorPagination
 
     def get_queryset(self):
         return (
