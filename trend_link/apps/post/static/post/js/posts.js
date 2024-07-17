@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
             <p>${post.text}</p>
+            ${post.tags ? `<p><small>tags: ${post.tags}</small></p>` : ''}
             ${post.image ? `<div><img src="${post.image}" alt="Post Image"></div>` : ''}
             <button type="button" class="likeButton ${likedClass}" data-post-id="${post.id}" data-has-liked="${post.has_liked}">Like</button>
             <div class="comments-section">
-                <p><strong>Comments:</strong></p>
                 <div class="comments">
                     ${loadComments(post)}
                 </div>
@@ -162,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
     $(document).on('click', '.loadMoreComments', function () {
         const button = $(this);
         const nextUrl = button.data('next-url');
-        const postId = button.data('post-id');
         const commentsContainer = button.closest('.comments');
 
         if (!nextUrl) return;
