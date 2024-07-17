@@ -13,17 +13,18 @@ function initCommentForms() {
             type: 'POST',
             url: createCommentUrl,
             data: $form.serialize(),
-            headers: {
-                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
-            },
+            headers: { 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() },
             success: function (response) {
-                const newComment = `<div class="comment" data-comment-id="${response.id}">
+                const currentUserId = parseInt(currentUser, 10);
+                const responseUserId = parseInt(response.user.id, 10);
+                const newComment = `
+                <div class="comment" data-comment-id="${response.id}">
                     <div class="comment-header">
                         <img src="${response.user.profile.profile_picture}" alt="Profile Picture">
                         <a href="${profileUrl.replace('0', response.user.id)}"><strong>${response.user.username}</strong></a>
                         <div class="comment-buttons">
-                            ${response.user.username === currentUser ? `<button class="commentEdit" data-comment-id="${response.id}">Edit</button>` : ''}
-                            ${response.user.username === currentUser || response.user.username === currentUser ? `<button type="button" class="commentDelete" data-comment-id="${response.id}">Delete</button>` : ''}
+                            ${responseUserId === currentUserId ? `<button class="commentEdit" data-comment-id="${response.id}">Edit</button>` : ''}
+                            ${responseUserId === currentUserId ? `<button type="button" class="commentDelete" data-comment-id="${response.id}">Delete</button>` : ''}
                         </div>
                     </div>
                     <p>${response.text}</p>
@@ -76,15 +77,13 @@ function initCommentForms() {
             type: 'PUT',
             url: updateUrl,
             data: $form.serialize(),
-            headers: {
-                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
-            },
+            headers: { 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() },
             success: function (response) {
                 const commentElement = $(`.comment[data-comment-id="${commentId}"]`);
                 commentElement.find('p').first().text(response.text);
                 $form.remove();
             },
-            error: function (response) {
+            error: function () {
                 alert('An error occurred while updating the comment.');
             }
         });
@@ -98,13 +97,11 @@ function initCommentForms() {
         $.ajax({
             type: 'DELETE',
             url: url,
-            headers: {
-                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
-            },
+            headers: { 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() },
             success: function () {
                 $(`.commentDelete[data-comment-id="${commentId}"]`).closest('.comment').remove();
             },
-            error: function (response) {
+            error: function () {
                 alert('An error occurred while deleting the comment.');
             }
         });
