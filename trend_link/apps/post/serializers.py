@@ -7,7 +7,7 @@ from apps.post.paginations import CommentPagination
 class EditCreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ["text", "image"]
+        fields = ["text", "image", "tags"]
 
     def validate(self, data):
         text = data.get("text")
