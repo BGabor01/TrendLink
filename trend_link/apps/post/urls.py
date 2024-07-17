@@ -3,13 +3,13 @@ from django.views.generic import TemplateView
 from apps.post.views import (
     ListPostsView,
     CreatePostView,
+    UpdatePostView,
+    DeletePostView,
     CreateCommentView,
     DeleteCommentView,
     UpdateCommentView,
     LikePostView,
     UnlikePostView,
-    UpdatePostView,
-    DeletePostView
 )
 
 urlpatterns = [
@@ -20,9 +20,9 @@ urlpatterns = [
         name="create-post",
     ),
     path("api/list/", ListPostsView.as_view(), name="list-post-api"),
-    path("api/comment/create/", CreateCommentView.as_view(), name="create-comment-api"),
     path("api/<int:pk>/update/", UpdatePostView.as_view(), name="update-post-api"),
     path("api/<int:pk>/delete/", DeletePostView.as_view(), name="delete-post-api"),
+    path("api/comment/create/", CreateCommentView.as_view(), name="create-comment-api"),
     path(
         "api/comment/<int:pk>/delete/",
         DeleteCommentView.as_view(),
