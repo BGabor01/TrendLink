@@ -33,21 +33,9 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PaginatedCommentsField(serializers.Field):
-    def get_attribute(self, instance):
-        return instance.comments.all()
-
-    def to_representation(self, value):
-        request = self.context.get("request")
-        paginator = CommentPagination()
-        page = paginator.paginate_queryset(value, request)
-        serializer = CommentSerializer(page, many=True, context={"request": request})
-        return paginator.get_paginated_response(serializer.data)
-
-
 class ListPostsSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    comments = PaginatedCommentsField()
+    comments = serializers.SerializerMethodField()
     has_liked = serializers.SerializerMethodField()
 
     class Meta:
@@ -56,6 +44,13 @@ class ListPostsSerializer(serializers.ModelSerializer):
 
     def get_has_liked(self, obj):
         return obj.has_liked
+
+    def get_comments(self, obj):
+        comments = obj.comments.all()
+        paginator = CommentPagination()
+        page = paginator.paginate_queryset(comments, self.context["request"])
+        serializer = CommentSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data).data
 
 
 class CreateCommentSerializer(serializers.ModelSerializer):
