@@ -5,20 +5,26 @@
 <link rel="stylesheet" href="{% static 'post/css/post.css' %}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'post/js/create-post.js' %}"></script>
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 {% endblock %}
 {% block content %}
 <div class="form-container">
-        <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'create-post-api' %}">
-            {% csrf_token %}
-           <div>
-                <label for="text">Text</label>
-                <textarea id="text" name="text" rows="5" cols="50"></textarea>
-            </div>
-            <div>
-                <label for="fileInput">Image:</label>
-                <input type="file" id="fileInput" name="image">
-            </div>
-            <input type="submit" value="Post">
-        </form>
+    <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'create-post-api' %}">
+        {% csrf_token %}
+        <div>
+            <label for="text">Text</label>
+            <textarea id="text" name="text" rows="5" cols="50"></textarea>
+        </div>
+        <div>
+            <label for="fileInput">Image:</label>
+            <input type="file" id="fileInput" name="image">
+        </div>
+        <div>
+            <label for="tags">Tags</label>
+            <input id="tags" name="tags" type="text">
+        </div>
+        <input type="submit" value="Post">
+    </form>
 </div>
 {% endblock %}
