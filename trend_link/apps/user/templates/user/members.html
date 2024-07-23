@@ -4,18 +4,15 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'user/css/members.css' %}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'user/js/members.js' %}"
-defer
-data-get-members-url="{% url 'members-api' %}"
-data-profile-details-url="{% url 'profile' 0 %}"
-data-login-url="{% url 'login' %}"
+<script src="{% static 'user/js/members.js' %}" defer
+    data-get-members-url="{% url 'api_members_list' %}"
+    data-profile-details-url="{% url 'view_profile' 0 %}"
+    data-login-url="{% url 'view_login' %}"
 ></script>
-
 {% endblock %}
 {% block content %}
 <div class="profiles-container">
-        <div class="profiles-list" id="profiles-list">
-        </div>
+    <div class="profiles-list" id="profiles-list">
+    </div>
 </div>
 {% endblock %}
-
