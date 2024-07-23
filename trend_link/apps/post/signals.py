@@ -9,6 +9,15 @@ from apps.post.models import Like
 
 @receiver(post_save, sender=Like)
 def send_like_notification(sender, instance, created, **kwargs):
+    """
+    Sends a notification when a Like instance is created.
+
+    Args:
+        sender (Model): The model class that sent the signal.
+        instance (Like): The actual instance being saved.
+        created (bool): A boolean indicating if a new record was created.
+        **kwargs: Additional keyword arguments.
+    """
     if created:
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
