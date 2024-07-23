@@ -17,7 +17,7 @@
         <div class="right">
             <div class="login-form-container">
                 <h2>Login</h2>
-                <form id="loginForm" action="{% url 'login-api' %}" data-url="{% url 'login-api' %}">
+                <form id="loginForm" data-url="{% url 'api_login' %}">
                     {% csrf_token %}
                     <div>
                         <label for="id_username">Username:</label>
@@ -29,7 +29,7 @@
                     </div>
                     <button type="submit">Login</button>
                 </form>
-                <p>Don't have an account? <a href="{% url 'signup' %}">Create one here</a></p>
+                <p>Don't have an account? <a href="{% url 'view_signup' %}">Create one here</a></p>
                 <div id="error-message" style="color: red;"></div>
             </div>
         </div>

@@ -7,11 +7,11 @@
 <script src="{% static 'user/js/profile.js' %}"
 defer
 data-current-user-id="{{ user.id }}"
-data-connect-url="{% url 'send-connectionreq-api' %}"
-data-retrieve-profile-url="{% url 'profile' 0 %}"
-data-retrieve-profile-api-url="{% url 'profile-retrieve-api' 0 %}"
-data-update-profile-url="{% url 'profile-update-api' 0 %}"
-data-login-url="{% url 'login' %}"
+data-connect-url="{% url 'api_send_connection_request' %}"
+data-retrieve-profile-url="{% url 'view_profile' 0 %}"
+data-retrieve-profile-api-url="{% url 'api_profile_detail' 0 %}"
+data-update-profile-url="{% url 'api_profile_update' 0 %}"
+data-login-url="{% url 'view_login' %}"
 ></script>
 {% endblock %}
 {% block content %}
