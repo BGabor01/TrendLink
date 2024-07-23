@@ -6,29 +6,26 @@
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'post/js/posts.js' %}"
-defer
-data-current-user="{{ user }}"
-data-profile-url="{% url 'profile' 0 %}"
-data-get-posts-url="{% url 'list-post-api' %}"
-data-delete-post-url="{% url 'delete-post-api' 0 %}"
-data-update-post-url="{% url 'update-post-api' 0 %}"
+    defer
+    data-current-user="{{ user }}"
+    data-profile-url="{% url 'view_profile' 0 %}"
+    data-get-posts-url="{% url 'api_list_posts' %}"
+    data-delete-post-url="{% url 'api_delete_post' 0 %}"
+    data-update-post-url="{% url 'api_update_post' 0 %}"
 ></script>
 <script src="{% static 'post/js/comments.js' %}"
-defer
-data-profile-url="{% url 'profile' 0 %}"
-data-delete-comment-url="{% url 'delete-comment-api' 0 %}"
-data-update-comment-url="{% url 'update-comment-api' 0 %}"
-data-create-comment-url="{% url 'create-comment-api' %}"
-data-current-user="{{ user.id }}"
->
-</script>
+    defer
+    data-profile-url="{% url 'view_profile' 0 %}"
+    data-delete-comment-url="{% url 'api_delete_comment' 0 %}"
+    data-update-comment-url="{% url 'api_update_comment' 0 %}"
+    data-create-comment-url="{% url 'api_create_comment' %}"
+    data-current-user="{{ user.id }}"
+></script>
 <script src="{% static 'post/js/like.js' %}"
-defer
-data-like-post-url="{% url 'like-post-api' %}"
-data-unlike-post-url="{% url 'unlike-post-api' 0 %}"
->
-</script>
-
+    defer
+    data-like-post-url="{% url 'api_like_post' %}"
+    data-unlike-post-url="{% url 'api_unlike_post' 0 %}"
+></script>
 {% endblock %}
 
 {% block content %}
