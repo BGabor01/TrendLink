@@ -1,11 +1,13 @@
-from rest_framework import generics
+from django.db import IntegrityError
+from django.db.models import Exists, OuterRef
+from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.exceptions import ValidationError
-from django.db.models import Exists, OuterRef
-from django.db import IntegrityError
 
+from apps.post.models import Post, Comment, Like
+from apps.post.paginations import PostCursorPagination
+from apps.post.permissions import IsOwnerOrPostOwnerOrReadOnly
 from apps.post.serializers import (
     EditCreatePostSerializer,
     ListPostsSerializer,
@@ -15,10 +17,7 @@ from apps.post.serializers import (
     LikePostSerializer,
     PostSerializer,
 )
-from apps.post.models import Post, Comment, Like
-from apps.post.permissions import IsOwnerOrPostOwnerOrReadOnly
 from apps.user.permissions import IsOwnerOrReadOnly
-from apps.post.paginations import PostCursorPagination
 
 
 class CreatePostView(generics.CreateAPIView):
@@ -49,11 +48,7 @@ class ListPostsView(generics.ListAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update(
-            {
-                "request": self.request,
-            }
-        )
+        context.update({"request": self.request})
         return context
 
 
@@ -113,12 +108,13 @@ class UnlikePostView(generics.DestroyAPIView):
         post_id = self.kwargs["post_id"]
         user = self.request.user
         try:
-            like = Like.objects.get(post_id=post_id, user=user)
-            return like
+            return Like.objects.get(post_id=post_id, user=user)
         except Like.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            raise ValidationError(
+                {"detail": "Like not found"}, status.HTTP_404_NOT_FOUND
+            )
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self):
         like = self.get_object()
         like.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

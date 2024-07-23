@@ -1,17 +1,15 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-from rest_framework import status
 from django.db import IntegrityError
+from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-
+from apps.connection.models import ConnectionRequest
 from apps.connection.serializers import (
     SendConnectionRequestSerializer,
     ConnectionRequestSerializer,
     ConnectionRequestActionsSerializer,
 )
-from apps.connection.models import ConnectionRequest
 
 
 class SendConnectionRequestView(generics.CreateAPIView):
@@ -49,7 +47,7 @@ class AcceptConnectionRequestView(generics.UpdateAPIView):
     def get_queryset(self):
         return ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
 
-    def update(self, request, *args, **kwargs):
+    def update(self):
         instance = self.get_object()
         instance.accept()
         return Response({"status": "accepted"}, status=status.HTTP_200_OK)
@@ -63,7 +61,7 @@ class RejectConnectionRequestView(generics.DestroyAPIView):
     def get_queryset(self):
         return ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
 
-    def update(self, request, *args, **kwargs):
+    def destroy(self):
         instance = self.get_object()
         instance.reject()
         return Response(status=status.HTTP_204_NO_CONTENT)

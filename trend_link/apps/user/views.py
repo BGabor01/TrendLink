@@ -1,8 +1,8 @@
 from django.shortcuts import redirect
+from django.contrib.auth import login, authenticate, logout
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth import login, authenticate, logout
 
 from apps.user.serializers import (
     SignUpSerializer,
@@ -21,7 +21,8 @@ class SignUpView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         user = authenticate(
-            username=response.data["username"], password=request.data["password1"]
+            username=response.data.get("username"),
+            password=request.data.get("password1")
         )
         if user:
             login(request, user)
@@ -41,14 +42,12 @@ class LoginView(generics.GenericAPIView):
 
 
 class LogoutView(generics.GenericAPIView):
-
     def post(self, request):
         logout(request)
         return redirect("login")
 
 
 class UpdateProfileView(generics.UpdateAPIView):
-
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = UserProfile.objects.all().select_related("user")
@@ -56,24 +55,20 @@ class UpdateProfileView(generics.UpdateAPIView):
 
 
 class RetrieveProfileView(generics.RetrieveAPIView):
-
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = "pk"
 
-    def get_queryset(self, **kwargs):
+    def get_queryset(self):
         profile_user_id = self.kwargs["pk"]
         return User.objects.with_connection_info(self.request.user, profile_user_id)
 
 
 class ListMembersView(generics.ListAPIView):
-
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        from apps.user.models import User
-
         return (
             User.objects.exclude(id=self.request.user.id)
             .select_related("profile")
