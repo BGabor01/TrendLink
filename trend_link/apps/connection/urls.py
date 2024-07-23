@@ -9,29 +9,17 @@ from apps.connection.views import (
 )
 
 urlpatterns = [
-    path(
-        "api/request/send/",
-        SendConnectionRequestView.as_view(),
-        name="send-connectionreq-api",
-    ),
-    path(
-        "request/list/",
-        TemplateView.as_view(template_name="connection/connection_reqs.html"),
-        name="list-connectionreq",
-    ),
-    path(
-        "api/request/list/",
-        ListConnectionRequests.as_view(),
-        name="list-connectionreq-api",
-    ),
-    path(
-        "api/request/<int:pk>/accept/",
-        AcceptConnectionRequestView.as_view(),
-        name="accept-connectionreq-api",
-    ),
-    path(
-        "api/request/<int:pk>/reject/",
-        RejectConnectionRequestView.as_view(),
-        name="reject-connectionreq-api",
-    ),
+    # API Endpoints
+    path("api/request/send/", SendConnectionRequestView.as_view(),
+         name="api_send_connection_request"),
+    path("api/request/list/", ListConnectionRequests.as_view(),
+         name="api_list_connection_requests"),
+    path("api/request/<int:pk>/accept/", AcceptConnectionRequestView.as_view(),
+         name="api_accept_connection_request"),
+    path("api/request/<int:pk>/reject/", RejectConnectionRequestView.as_view(),
+         name="api_reject_connection_request"),
+
+    # Template Views
+    path("request/list/", TemplateView.as_view(template_name="connection/connection_reqs.html"),
+         name="view_list_connection_requests"),
 ]
