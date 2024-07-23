@@ -29,7 +29,7 @@ def test_profile_creating_signal(user):
 
 def test_permission_denied_if_not_owner_PUT(client, other_user):
     client.login(username="testuser", password="password")
-    url = reverse(f"profile-update-api", kwargs={"pk": other_user.id})
+    url = reverse(f"api_profile_update", kwargs={"pk": other_user.id})
     data = {"bio": "Updated bio", "birth_date": "2000-01-01"}
     response = client.put(url, data, format="json")
     assert response.status_code == 403
@@ -37,7 +37,7 @@ def test_permission_denied_if_not_owner_PUT(client, other_user):
 
 def test_access_granted_GET(client, user):
     client.login(username="testuser", password="password")
-    url = reverse(f"profile-retrieve-api", kwargs={"pk": user.id})
+    url = reverse(f"api_profile_detail", kwargs={"pk": user.id})
     response = client.get(url)
 
     assert response.status_code == 200

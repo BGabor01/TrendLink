@@ -24,7 +24,7 @@ def client():
 @pytest.mark.django_db
 def test_create_connection_request(client, sender, recipient):
     client.login(username="sender", password="password")
-    url = reverse("send-connectionreq-api")
+    url = reverse("api_send_connection_request")
     data = {"recipient": recipient.id}
 
     response = client.post(url, data, format="json")
@@ -39,7 +39,7 @@ def test_create_duplicate_connection_request(client, sender, recipient):
     ConnectionRequest.objects.create(sender=sender, recipient=recipient)
     client.login(username="sender", password="password")
 
-    url = reverse("send-connectionreq-api")
+    url = reverse("api_send_connection_request")
     data = {"recipient": recipient.id}
 
     response = client.post(url, data, format="json")
@@ -55,7 +55,7 @@ def test_create_duplicate_connection_request_reversed(client, sender, recipient)
     ConnectionRequest.objects.create(sender=sender, recipient=recipient)
     client.login(username="recipient", password="password")
 
-    url = reverse("send-connectionreq-api")
+    url = reverse("api_send_connection_request")
     data = {"recipient": sender.id}
 
     response = client.post(url, data, format="json")
