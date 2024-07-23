@@ -3,7 +3,6 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import login, authenticate, logout
-from django.db.models import Case, When, Q, Value, BooleanField
 
 from apps.user.serializers import (
     SignUpSerializer,
@@ -13,7 +12,6 @@ from apps.user.serializers import (
 )
 from apps.user.permissions import IsOwnerOrReadOnly
 from apps.user.models import User, UserProfile
-from apps.connection.models import ConnectionRequest
 
 
 class SignUpView(generics.CreateAPIView):
