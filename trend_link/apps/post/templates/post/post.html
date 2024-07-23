@@ -10,7 +10,7 @@
 {% endblock %}
 {% block content %}
 <div class="form-container">
-    <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'create-post-api' %}">
+    <form id="postForm" method="post" enctype="multipart/form-data" data-url="{% url 'api_create_post' %}">
         {% csrf_token %}
         <div>
             <label for="text">Text</label>
