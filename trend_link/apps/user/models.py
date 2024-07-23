@@ -4,7 +4,8 @@ from apps.user.managers import UserManager
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile")
     bio = models.CharField(blank=True, max_length=255)
     birth_date = models.DateField(null=True, blank=True)
     profile_picture = models.ImageField(

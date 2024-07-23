@@ -35,7 +35,8 @@ class ConnectionRequest(models.Model):
         related_query_name="recipient",
         on_delete=models.CASCADE,
     )
-    status = models.IntegerField(choices=STATUS_CHOICES, default=0, db_index=True)
+    status = models.IntegerField(
+        choices=STATUS_CHOICES, default=0, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:

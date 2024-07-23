@@ -9,7 +9,8 @@ class Post(models.Model):
     )
     text = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to="post_images/")
-    tags = ArrayField(models.CharField(max_length=50), null=True, blank=True, size=8)
+    tags = ArrayField(models.CharField(max_length=50),
+                      null=True, blank=True, size=8)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True, db_index=True)
 

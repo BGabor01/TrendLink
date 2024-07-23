@@ -44,7 +44,8 @@ class LoginSerializer(serializers.Serializer):
                     "Unable to log in with provided credentials."
                 )
         else:
-            raise serializers.ValidationError("Must include 'username' and 'password'.")
+            raise serializers.ValidationError(
+                "Must include 'username' and 'password'.")
 
         return data
 

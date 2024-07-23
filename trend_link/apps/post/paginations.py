@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 class CommentPagination(pagination.CursorPagination):
     page_size = 2
-    ordering="-created_at"
+    ordering = "-created_at"
 
     def get_paginated_response(self, data):
         return Response(

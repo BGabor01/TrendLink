@@ -34,7 +34,8 @@ class ListConnectionRequests(generics.ListAPIView):
 
     def get_queryset(self):
         return (
-            ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
+            ConnectionRequest.objects.filter(
+                recipient=self.request.user, status=0)
             .select_related("sender")
             .order_by("-created_at")
         )

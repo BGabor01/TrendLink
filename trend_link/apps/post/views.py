@@ -40,7 +40,8 @@ class ListPostsView(generics.ListAPIView):
             .select_related("user", "user__profile")
             .annotate(
                 has_liked=Exists(
-                    Like.objects.filter(user=self.request.user, post=OuterRef("pk"))
+                    Like.objects.filter(
+                        user=self.request.user, post=OuterRef("pk"))
                 )
             )
             .order_by("-created_at")
