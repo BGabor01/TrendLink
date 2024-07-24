@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 
+from apps.post.managers import PostManager
+
 
 class Post(models.Model):
     user = models.ForeignKey(
@@ -22,6 +24,8 @@ class Post(models.Model):
 
     def get_number_of_comments(self):
         return self.comments.count()
+
+    objects = PostManager()
 
     class Meta:
         app_label = "post"
