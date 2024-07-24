@@ -44,7 +44,7 @@ class LoginView(generics.GenericAPIView):
 class LogoutView(generics.GenericAPIView):
     def post(self, request):
         logout(request)
-        return redirect("login")
+        return redirect("view_login")
 
 
 class UpdateProfileView(generics.UpdateAPIView):
