@@ -1,5 +1,4 @@
 from django.db import IntegrityError
-from django.db.models import Exists, OuterRef
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -31,20 +30,10 @@ class CreatePostView(generics.CreateAPIView):
 class ListPostsView(generics.ListAPIView):
     serializer_class = ListPostsSerializer
     pagination_class = PostCursorPagination
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return (
-            Post.objects.all()
-            .prefetch_related("comments", "comments__user", "comments__user__profile")
-            .select_related("user", "user__profile")
-            .annotate(
-                has_liked=Exists(
-                    Like.objects.filter(
-                        user=self.request.user, post=OuterRef("pk"))
-                )
-            )
-            .order_by("-created_at")
-        )
+        return Post.objects.only_connected_posts(self.request)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -114,7 +103,7 @@ class UnlikePostView(generics.DestroyAPIView):
                 {"detail": "Like not found"}, status.HTTP_404_NOT_FOUND
             )
 
-    def delete(self):
+    def delete(self, *args, **kwargs):
         like = self.get_object()
         like.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
