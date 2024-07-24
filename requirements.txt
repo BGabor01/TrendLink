@@ -11,3 +11,4 @@ channels-redis~=4.2.0
 websockets~=12.0
 wsproto~=1.2.0
 django_health_check~=3.18.3
+django_debug_toolbar~=4.4.6
