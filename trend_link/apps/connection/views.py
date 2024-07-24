@@ -47,7 +47,7 @@ class AcceptConnectionRequestView(generics.UpdateAPIView):
     def get_queryset(self):
         return ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
 
-    def update(self):
+    def update(self, *args, **kwargs):
         instance = self.get_object()
         instance.accept()
         return Response({"status": "accepted"}, status=status.HTTP_200_OK)
@@ -61,7 +61,7 @@ class RejectConnectionRequestView(generics.DestroyAPIView):
     def get_queryset(self):
         return ConnectionRequest.objects.filter(recipient=self.request.user, status=0)
 
-    def destroy(self):
+    def destroy(self, *args, **kwargs):
         instance = self.get_object()
         instance.reject()
         return Response(status=status.HTTP_204_NO_CONTENT)
