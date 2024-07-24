@@ -68,7 +68,7 @@ class ListPostsSerializer(serializers.ModelSerializer):
         """
         Paginate and serialize the comments for the post.
         """
-        comments = obj.comments.all()
+        comments = obj.comments.all().select_related("user", "user__profile")
         paginator = CommentPagination()
         page = paginator.paginate_queryset(comments, self.context["request"])
         serializer = CommentSerializer(page, many=True)
