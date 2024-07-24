@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls import static
 from django.views.generic import TemplateView
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,4 +31,6 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [static.static(settings.MEDIA_URL,
+                                  document_root=settings.MEDIA_ROOT), ]
+    urlpatterns += debug_toolbar_urls()
