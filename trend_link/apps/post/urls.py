@@ -25,7 +25,7 @@ urlpatterns = [
     path("api/comment/<int:pk>/update/",
          UpdateCommentView.as_view(), name="api_update_comment"),
     path("api/like/create/", LikePostView.as_view(), name="api_like_post"),
-    path("api/like/<int:post_id>/remove/",
+    path("api/like/<int:post_id>/delete/",
          UnlikePostView.as_view(), name="api_unlike_post"),
 
     # Template Views
