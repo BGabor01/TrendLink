@@ -20,24 +20,30 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto" style="color: #800080;">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_profile' user.id %}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_members' %}">Members</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_create_post' %}">Create Post</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_list_connection_requests' %}">Connection Requests</a>
-                    </li>
-                    <li class="nav-item">
-                        <form class="form-inline" method="post" action="{% url 'view_logout' %}">
-                            {% csrf_token %}
-                            <button class="btn btn-link nav-link" type="submit">Logout</button>
-                        </form>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_profile' user.id %}">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_members' %}">Members</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_create_post' %}">Create Post</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_list_connection_requests' %}">Connection Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <form class="form-inline" method="post" action="{% url 'view_logout' %}">
+                                {% csrf_token %}
+                                <button class="btn btn-link nav-link" type="submit">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <script type="text/javascript">
+                            window.location.href = "{% url 'view_login' %}";
+                        </script>
+                    {% endif %}
             </ul>
         </div>
     </nav>
