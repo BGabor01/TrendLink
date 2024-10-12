@@ -1,5 +1,4 @@
 # TrendLink
-A social media platform, that uses recommendation algorithms for personalized content and connections
 
 ## Table of Contents
 - [Features](#features)
